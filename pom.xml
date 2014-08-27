@@ -23,58 +23,58 @@
   <!-- 项目依赖 -->
   <dependencies>
   	<!-- ehcache-->
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
-      <version>${ehcache.version}</version>
-		</dependency>
+	<dependency>
+		<groupId>net.sf.ehcache</groupId>
+		<artifactId>ehcache-core</artifactId>
+       	<version>${ehcache.version}</version>
+	</dependency>
   	<!--spring-->
   	<dependency>
   		<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
+		<artifactId>spring-core</artifactId>
   		<version>${spring.version}</version>
     </dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
+		<artifactId>spring-context</artifactId>
   		<version>${spring.version}</version>
     </dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-      <version>${spring.version}</version>
+		<artifactId>spring-context-support</artifactId>
+        <version>${spring.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-      <version>${spring.version}</version>
+		<artifactId>spring-beans</artifactId>
+        <version>${spring.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
-		  <artifactId>spring-expression</artifactId>
-      <version>${spring.version}</version>
+		<artifactId>spring-expression</artifactId>
+        <version>${spring.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-      <version>${spring.version}</version>
-      <scope>test</scope>
+		<artifactId>spring-test</artifactId>
+        <version>${spring.version}</version>
+        <scope>test</scope>
   	</dependency>
   	<!-- 日志 -->
   	<dependency>
   		<groupId>org.slf4j</groupId>
-		  <artifactId>slf4j-api</artifactId>
-      <version>${slf4j-api.version}</version>
+		<artifactId>slf4j-api</artifactId>
+        <version>${slf4j-api.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>log4j</groupId>
-		  <artifactId>log4j</artifactId>
-      <version>${log4j.version}</version>
+	    <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.slf4j</groupId>
-		  <artifactId>slf4j-log4j12</artifactId>
-      <version>${slf4j-api.version}</version>
+		<artifactId>slf4j-log4j12</artifactId>
+        <version>${slf4j-api.version}</version>
   	</dependency>
   	<!-- aspectjweaver -->
   	<!-- <dependency>
@@ -85,57 +85,57 @@
   	<!-- json -->
   	<dependency>
   		<groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-lgpl</artifactId>
-      <version>${jackson.version}</version>
+        <artifactId>jackson-core-lgpl</artifactId>
+        <version>${jackson.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
-      <version>${jackson.version}</version>
+        <artifactId>jackson-core-asl</artifactId>
+        <version>${jackson.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <version>${jackson.version}</version>
+        <artifactId>jackson-mapper-asl</artifactId>
+        <version>${jackson.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-lgpl</artifactId>
-      <version>${jackson.version}</version>
+        <artifactId>jackson-mapper-lgpl</artifactId>
+        <version>${jackson.version}</version>
   	</dependency>
   	<!-- shiro -->
-	  <dependency>  
+	<dependency>  
 	    <groupId>org.apache.shiro</groupId>  
 	    <artifactId>shiro-core</artifactId>
-      <version>${shiro.version}</version>
-	  </dependency>
-	  <dependency>
-	    <groupId>org.apache.shiro</groupId>  
-		  <artifactId>shiro-web</artifactId>
-      <version>${shiro.version}</version>
-	  </dependency>
+        <version>${shiro.version}</version>
+	 </dependency>
+	<!--  <dependency>
+	     <groupId>org.apache.shiro</groupId>  
+		 <artifactId>shiro-web</artifactId>
+         <version>${shiro.version}</version>
+	  </dependency> -->
 	  <dependency>
 	    <groupId>org.apache.shiro</groupId>
     	<artifactId>shiro-ehcache</artifactId>
-      <version>${shiro.version}</version>
+        <version>${shiro.version}</version>
 	  </dependency>
-	  <dependency>
+	  <!-- <dependency>
 	    <groupId>org.apache.shiro</groupId>
     	<artifactId>shiro-quartz</artifactId>
       <version>${shiro.version}</version>
-	  </dependency>
-	  <dependency>
+	  </dependency> -->
+	 <dependency>
 	    <groupId>org.apache.shiro</groupId>
     	<artifactId>shiro-spring</artifactId>
-      <version>${shiro.version}</version>
-	  </dependency>
-  	<!--test junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <version>${shiro.version}</version>
+	 </dependency>
+  	 <!--test junit -->
+     <dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>${junit.version}</version>
+		<scope>test</scope>
+	</dependency>
   </dependencies>
   
   <!-- 编译 -->

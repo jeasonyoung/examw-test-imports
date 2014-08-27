@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 界面视图 -->
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	         xmlns:context="http://www.springframework.org/schema/context"
+	         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		                                       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">                                   
+		                                       
+			<!-- 主窗体界面 -->
+			<bean id="mainFrameView" class="com.examw.test.imports.view.MainFrame" init-method="init">
+			    <constructor-arg index="0" value="${MainFrame_Title}" />
+			    <constructor-arg index="1" value="${MainFrame_Width}" />
+			    <constructor-arg index="2" value="${MainFrame_Height}" />
+			    <!-- 用户鉴权 -->
+			    <property name="userAuthentication" ref="userAuthentication" />
+			    <!-- 登录界面 -->
+			    <property name="loginDialog" ref="loginDialgView" />
+			</bean>
+			<!--  登录模态界面 -->
+			<bean id="loginDialgView" class="com.examw.test.imports.view.UserLoginDialog">
+			    <constructor-arg index="0" ref="mainFrameView" /><!-- 设置主窗体 -->
+			    <constructor-arg index="1" value="${login_title}"/><!-- 标题 -->
+			    <constructor-arg index="2" value="${login_width}" /><!-- 宽度 -->
+			    <constructor-arg index="3" value="${login_height}" /><!-- 宽度 -->
+			</bean>
+</beans>
