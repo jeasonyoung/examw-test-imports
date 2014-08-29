@@ -1,9 +1,11 @@
 package com.examw.test.imports.view;
 
 import java.awt.Dimension;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
@@ -20,6 +22,7 @@ public class MainFrame extends JFrame {
 	private static final Logger logger = Logger.getLogger(MainFrame.class);
 	private IUserAuthentication userAuthentication;
 	private JDialog loginDialog;
+	private String closeDialogMessage,closeDialogTitle;
 	/**
 	 * 构造函数。
 	 * @param title
@@ -50,6 +53,22 @@ public class MainFrame extends JFrame {
 		this.loginDialog = loginDialog;
 	}
 	/**
+	 * 设置关闭窗体消息。
+	 * @param closeDialogMessage 
+	 *	  关闭窗体消息。
+	 */
+	public void setCloseDialogMessage(String closeDialogMessage) {
+		this.closeDialogMessage = closeDialogMessage;
+	}
+	/**
+	 * 设置关闭窗体消息标题。
+	 * @param closeDialogTitle 
+	 *	  关闭窗体消息标题。
+	 */
+	public void setCloseDialogTitle(String closeDialogTitle) {
+		this.closeDialogTitle = closeDialogTitle;
+	}
+	/**
 	 * 初始化函数。
 	 */
 	public void init(){
@@ -67,7 +86,23 @@ public class MainFrame extends JFrame {
 			if(logger.isDebugEnabled()) logger.debug("加载用户登录窗体...");
 			this.loginDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 			ViewUtils.positionCenterWindow(this.loginDialog);
+			this.setVisible(false);
 			this.loginDialog.setVisible(true);
 		}
+	}
+	/*
+	 * 窗体事件。
+	 * @see javax.swing.JDialog#processWindowEvent(java.awt.event.WindowEvent)
+	 */
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
+		if(e.getID() == WindowEvent.WINDOW_CLOSING){
+			if(logger.isDebugEnabled()) logger.debug("捕获主窗体关闭事件！");
+			if(JOptionPane.showConfirmDialog(this, this.closeDialogMessage,this.closeDialogTitle, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+				if(logger.isDebugEnabled()) logger.debug("退出程序！");
+				System.exit(0);
+			}
+		}
+		super.processWindowEvent(e);
 	}
 }

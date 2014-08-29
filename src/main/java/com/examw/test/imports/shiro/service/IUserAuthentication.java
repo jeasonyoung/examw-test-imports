@@ -11,4 +11,12 @@ public interface IUserAuthentication {
 	 * @return
 	 */
 	boolean isAuthenticated();
+	/**
+	 * 用户认证。
+	 * @param username
+	 * @param password
+	 * @return
+	 * @throws Exception
+	 */
+	Boolean authenticated(String username,String password) throws Exception;
 }

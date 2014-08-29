@@ -4,23 +4,101 @@
     	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	         xmlns:context="http://www.springframework.org/schema/context"
 	         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		                                       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">                                   
-		                                       
+		                                       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">           
 			<!-- 主窗体界面 -->
 			<bean id="mainFrameView" class="com.examw.test.imports.view.MainFrame" init-method="init">
-			    <constructor-arg index="0" value="${MainFrame_Title}" />
-			    <constructor-arg index="1" value="${MainFrame_Width}" />
-			    <constructor-arg index="2" value="${MainFrame_Height}" />
+			    <constructor-arg index="0" value="${main_title}" />
+			    <constructor-arg index="1" value="${main_width}" />
+			    <constructor-arg index="2" value="${main_height}" />
 			    <!-- 用户鉴权 -->
 			    <property name="userAuthentication" ref="userAuthentication" />
 			    <!-- 登录界面 -->
 			    <property name="loginDialog" ref="loginDialgView" />
+			    <property name="closeDialogTitle" value="${main_close_title}" /><!-- 关闭窗口时对话框标题 -->
+			    <property name="closeDialogMessage" value="${main_close_message}" /><!-- 关闭窗口时对话框内容 -->
 			</bean>
 			<!--  登录模态界面 -->
 			<bean id="loginDialgView" class="com.examw.test.imports.view.UserLoginDialog">
 			    <constructor-arg index="0" ref="mainFrameView" /><!-- 设置主窗体 -->
 			    <constructor-arg index="1" value="${login_title}"/><!-- 标题 -->
 			    <constructor-arg index="2" value="${login_width}" /><!-- 宽度 -->
-			    <constructor-arg index="3" value="${login_height}" /><!-- 宽度 -->
+			    <constructor-arg index="3" value="${login_height}" /><!-- 高度 -->
+			    <!-- 布局管理 -->
+			    <property name="layout" ref="defBorderLayout"/>
+			    <!-- 成员控件 -->
+			    <property name="members">
+			        <map>
+			            <entry key="Center"><!-- 账号密码输入区域 -->
+			                <bean class="com.examw.test.imports.view.ContentPanel">
+			                    <constructor-arg>
+			                        <bean class="java.awt.GridLayout">
+			                            <property name="rows" value="2" />
+			                            <property name="columns" value="1" />
+			                            <property name="hgap" value="5" />
+			                            <property name="vgap" value="2" />
+			                        </bean>
+			                    </constructor-arg>
+			                    <property name="memberList">
+			                        <list>
+			                            <bean class="com.examw.test.imports.view.ContentPanel">
+			                                <constructor-arg>
+						                        <bean class="java.awt.FlowLayout" />
+						                    </constructor-arg>
+						                    <property name="memberList">
+						                        <list>
+							                        <bean class="com.examw.test.imports.view.Label">
+					                                    <constructor-arg type="String" value="${login_username_title}" />
+					                             	</bean> 
+					                                <ref local="loginUsername" />
+				                                </list>
+						                     </property>
+			                            </bean>
+			                            <bean class="com.examw.test.imports.view.ContentPanel">
+			                                <constructor-arg>
+						                        <bean class="java.awt.FlowLayout" />
+						                    </constructor-arg>
+						                    <property name="memberList">
+						                        <list>
+							                        <bean class="com.examw.test.imports.view.Label">
+					                                    <constructor-arg type="String" value="${login_password_title}" />
+					                             	</bean> 
+					                                <ref local="loginPassword" />
+				                                </list>
+						                     </property>
+			                            </bean>
+			                        </list>
+			                    </property>
+			                </bean>
+			            </entry>
+			            <entry key="South"><!--  按钮区域 -->
+			                <bean class="javax.swing.JButton">
+                                  <constructor-arg type="String" value="${login_submit_title}" />
+                                  <property name="model"><!-- 按钮动作处理 -->
+                                      <bean class="com.examw.test.imports.view.model.UserLoginButtonModel">
+                                          <property name="usernameField" ref="loginUsername" /><!-- 用户名 -->
+                                          <property name="passwordField" ref="loginPassword" /><!-- 用户密码 -->
+                                          <property name="loginDialog" ref="loginDialgView" /><!-- 登录窗口 -->
+                                          <property name="mainFrame" ref="mainFrameView" /><!-- 主窗体 -->
+			    						  <property name="userAuthentication" ref="userAuthentication" /><!-- 用户鉴权 -->
+                                      </bean>
+                                  </property>
+                              </bean>
+			            </entry>
+			        </map>
+			    </property>
+			    <property name="closeDialogTitle" value="${login_close_title}" /><!-- 关闭窗口时对话框标题 -->
+			    <property name="closeDialogMessage" value="${login_close_message}" /> <!-- 关闭窗口时对话框内容 -->
 			</bean>
+			<!-- 登录用户名输入框 -->
+			<bean id="loginUsername" class="javax.swing.JTextField">
+			    <constructor-arg type="int" value="15"/>
+			    <property name="toolTipText" value="${login_username_toolTip}" />
+			</bean>
+			<!-- 登录用户密码输入框 -->
+			<bean id="loginPassword" class="javax.swing.JPasswordField">
+			    <constructor-arg type="int" value="15"/>
+			    <property name="toolTipText" value="${login_password_toolTip}" />
+			</bean>
+			<!-- 默认的BorderLayout布局 -->
+			<bean id="defBorderLayout" class="java.awt.BorderLayout" />
 </beans>

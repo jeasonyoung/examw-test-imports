@@ -21,4 +21,13 @@ public class UserAuthenticationImpl implements IUserAuthentication {
 		Subject subject = SecurityUtils.getSubject();
 		return subject.isAuthenticated();
 	}
+	/*
+	 * 用户认证。
+	 * @see com.examw.test.imports.shiro.service.IUserAuthentication#authenticated(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Boolean authenticated(String username, String password) throws Exception {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }
