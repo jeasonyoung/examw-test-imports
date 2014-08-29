@@ -10,6 +10,22 @@
 			    <constructor-arg index="0" value="${main_title}" />
 			    <constructor-arg index="1" value="${main_width}" />
 			    <constructor-arg index="2" value="${main_height}" />
+			    <!-- 设置布局 -->
+			    <property name="layout" ref="defBorderLayout" />
+			    <!-- 主界面成员集合 -->
+			    <property name="members">
+			        <map>
+			            <entry key="North">
+			                <ref local="mainTopMenu"/>
+			            </entry>
+			            <entry key="Center">
+			                <ref local="mainWorkspace"/>
+			            </entry>
+			            <entry key="South">
+			                <ref local="mainFooter"/>
+			            </entry>
+			        </map>
+			    </property>
 			    <!-- 用户鉴权 -->
 			    <property name="userAuthentication" ref="userAuthentication" />
 			    <!-- 登录界面 -->
@@ -101,4 +117,22 @@
 			</bean>
 			<!-- 默认的BorderLayout布局 -->
 			<bean id="defBorderLayout" class="java.awt.BorderLayout" />
+			<!-- 主界面顶部菜单 -->
+			<bean id="mainTopMenu" class="com.examw.test.imports.view.ContentPanel">
+			     <constructor-arg>
+                     <bean class="java.awt.FlowLayout" />
+                 </constructor-arg>
+			</bean>
+			<!-- 主界面工作区域 -->
+			<bean id="mainWorkspace" class="com.examw.test.imports.view.ContentPanel">
+			     <constructor-arg>
+                     <bean class="java.awt.FlowLayout" />
+                 </constructor-arg>
+			</bean>
+			<!-- 主界面底部 -->
+			<bean id="mainFooter" class="com.examw.test.imports.view.ContentPanel">
+			     <constructor-arg>
+                     <bean class="java.awt.FlowLayout" />
+                 </constructor-arg>
+			</bean>
 </beans>

@@ -1,7 +1,9 @@
 package com.examw.test.imports.view;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -69,6 +71,20 @@ public class MainFrame extends JFrame {
 		this.closeDialogTitle = closeDialogTitle;
 	}
 	/**
+	 * 设置内容成员集合。
+	 * @param members
+	 * 内容成员集合。
+	 */
+	public void setMembers(Map<String, Component> members){
+		if(members != null && members.size() > 0){
+			if(logger.isDebugEnabled()) logger.debug("加载主界面成员组件...");
+			for(Map.Entry<String, Component> entry : members.entrySet()){
+				if(logger.isDebugEnabled()) logger.debug(String.format("开始加载[%s]...", entry.getKey()));
+				this.add(entry.getValue(),entry.getKey());
+			}
+		}
+	}
+	/**
 	 * 初始化函数。
 	 */
 	public void init(){
@@ -86,7 +102,6 @@ public class MainFrame extends JFrame {
 			if(logger.isDebugEnabled()) logger.debug("加载用户登录窗体...");
 			this.loginDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 			ViewUtils.positionCenterWindow(this.loginDialog);
-			this.setVisible(false);
 			this.loginDialog.setVisible(true);
 		}
 	}
@@ -98,11 +113,12 @@ public class MainFrame extends JFrame {
 	protected void processWindowEvent(WindowEvent e) {
 		if(e.getID() == WindowEvent.WINDOW_CLOSING){
 			if(logger.isDebugEnabled()) logger.debug("捕获主窗体关闭事件！");
-			if(JOptionPane.showConfirmDialog(this, this.closeDialogMessage,this.closeDialogTitle, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-				if(logger.isDebugEnabled()) logger.debug("退出程序！");
-				System.exit(0);
+			if(JOptionPane.showConfirmDialog(this, this.closeDialogMessage,this.closeDialogTitle, JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION){
+				return;
 			}
+			if(logger.isDebugEnabled()) logger.debug("退出程序！");
+			super.processWindowEvent(e);
 		}
-		super.processWindowEvent(e);
+		
 	}
 }
