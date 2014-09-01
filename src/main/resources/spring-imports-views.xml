@@ -13,7 +13,9 @@
 			    <constructor-arg index="1" value="${main_width}" />
 			    <constructor-arg index="2" value="${main_height}" />
 			    <!-- 设置布局 -->
-			    <property name="layout" ref="defBorderLayout" />
+			    <property name="layout">
+			        <bean class="java.awt.BorderLayout" />
+			    </property>
 			    <!-- 主界面成员集合 -->
 			    <property name="members">
 			        <map>
@@ -24,8 +26,17 @@
 			                 <ref local="mainWorkspace"/>
 			            </entry>
 			            <entry key="South">
-			                <bean class="com.examw.test.imports.view.Label">
-			                    <constructor-arg value="当前状态：xxx-" />
+			                <bean class="javax.swing.JLabel">
+			                    <constructor-arg index="0" value="当前状态：xxx-   " />
+			                    <constructor-arg index="1">
+			                        <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+			                    </constructor-arg>
+			                    <property name="preferredSize">
+			                         <bean class="java.awt.Dimension">
+			                             <constructor-arg index="0" value="368" />
+			                             <constructor-arg index="1" value="30" />
+			                         </bean>
+			                    </property>
 			                </bean>
 			            </entry>
 			        </map>
@@ -44,7 +55,9 @@
 			    <constructor-arg index="2" value="${login_width}" /><!-- 宽度 -->
 			    <constructor-arg index="3" value="${login_height}" /><!-- 高度 -->
 			    <!-- 布局管理 -->
-			    <property name="layout" ref="defBorderLayout"/>
+			    <property name="layout">
+			        <bean class="java.awt.BorderLayout" />
+			    </property>
 			    <!-- 成员控件 -->
 			    <property name="members">
 			        <map>
@@ -66,8 +79,17 @@
 						                    </constructor-arg>
 						                    <property name="memberList">
 						                        <list>
-							                        <bean class="com.examw.test.imports.view.Label">
-					                                    <constructor-arg type="String" value="${login_username_title}" />
+							                        <bean class="javax.swing.JLabel">
+					                                    <constructor-arg index="0" value="${login_username_title}" />
+					                                    <constructor-arg index="1">
+									                        <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+									                    </constructor-arg>
+									                    <property name="preferredSize">
+									                         <bean class="java.awt.Dimension">
+									                             <constructor-arg index="0" value="75" />
+									                             <constructor-arg index="1" value="30" />
+									                         </bean>
+									                    </property>
 					                             	</bean> 
 					                                <ref local="loginUsername" />
 				                                </list>
@@ -79,8 +101,17 @@
 						                    </constructor-arg>
 						                    <property name="memberList">
 						                        <list>
-							                        <bean class="com.examw.test.imports.view.Label">
-					                                    <constructor-arg type="String" value="${login_password_title}" />
+							                        <bean class="javax.swing.JLabel">
+					                                    <constructor-arg index="0" value="${login_password_title}" />
+					                                    <constructor-arg index="1">
+									                        <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+									                    </constructor-arg>
+									                    <property name="preferredSize">
+									                         <bean class="java.awt.Dimension">
+									                             <constructor-arg index="0" value="75" />
+									                             <constructor-arg index="1" value="30" />
+									                         </bean>
+									                    </property>
 					                             	</bean> 
 					                                <ref local="loginPassword" />
 				                                </list>
@@ -119,37 +150,148 @@
 			    <constructor-arg type="int" value="15"/>
 			    <property name="toolTipText" value="${login_password_toolTip}" />
 			</bean>
-			<!-- 默认的BorderLayout布局 -->
-			<bean id="defBorderLayout" class="java.awt.BorderLayout" />
 			<!-- 主界面顶部菜单 -->
-			<bean id="mainTopMenu" class="com.examw.test.imports.view.ContentPanel">
-			     <constructor-arg>
-                     <bean class="java.awt.FlowLayout" />
-                 </constructor-arg>
+			<bean id="mainTopMenu" class="com.examw.test.imports.view.MenuBars">
+			     <property name="menus">
+                        <list>
+                            <bean class="com.examw.test.imports.view.Menu">
+                                <constructor-arg value="文件(F)" />
+                                <property name="mnemonic">
+                                    <util:constant static-field="java.awt.event.KeyEvent.VK_F"/>
+                                </property>
+                                <property name="items">
+                                    <list>
+                                        <bean class="javax.swing.JMenuItem">
+                                            <constructor-arg value="导入试题" />
+                                        </bean>
+                                    </list>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
 			</bean>
 			<!-- 主界面工作区域 -->
-			<bean id="mainWorkspace" class="javax.swing.JScrollPane">
-			     <constructor-arg>
-                     <bean class="javax.swing.JTextArea">
-                         <property name="lineWrap" value="true" /><!-- 自动换行 -->
-                         <property name="border">
-                             <bean class="javax.swing.border.EtchedBorder">
-                                 <constructor-arg index="0" value="1"/>
-                                 <constructor-arg index="1">
-                                     <util:constant static-field="java.awt.Color.RED"/>
-                                 </constructor-arg>
-                                 <constructor-arg index="2">
-                                     <util:constant static-field="java.awt.Color.GREEN"/>
-                                 </constructor-arg>
-                             </bean>
-                         </property>
-                     </bean>
-                 </constructor-arg>
-			</bean>
-			<!-- 主界面底部 -->
-			<bean id="mainFooter" class="com.examw.test.imports.view.ContentPanel">
-			     <constructor-arg>
-                     <bean class="java.awt.FlowLayout" />
-                 </constructor-arg>
+			<bean id="mainWorkspace" class="com.examw.test.imports.view.ContentPanel">
+			    <constructor-arg>
+			        <bean class="java.awt.BorderLayout" />
+			    </constructor-arg>
+			    <property name="memberMap">
+			        <map>
+			            <entry key="North">
+			                <bean class="com.examw.test.imports.view.ContentPanel">
+			                    <constructor-arg>
+				                     <bean class="java.awt.FlowLayout">
+				                         <constructor-arg type="int">
+				                             <util:constant static-field="java.awt.FlowLayout.LEFT"/>
+				                         </constructor-arg>
+				                     </bean>
+				                 </constructor-arg>
+				                 <property name="memberList">
+				                     <list>
+				                         <bean class="javax.swing.JLabel">
+						                    <constructor-arg index="0" value="所属考试：" />
+						                    <constructor-arg index="1">
+						                        <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+						                    </constructor-arg>
+						                    <property name="preferredSize">
+						                         <bean class="java.awt.Dimension">
+						                             <constructor-arg index="0" value="75" />
+						                             <constructor-arg index="1" value="30" />
+						                         </bean>
+						                    </property>
+						                 </bean>
+						                 <bean class="javax.swing.JComboBox">
+						                     <property name="preferredSize">
+						                         <bean class="java.awt.Dimension">
+						                             <constructor-arg index="0" value="168" />
+						                             <constructor-arg index="1" value="30" />
+						                         </bean>
+						                     </property>
+						                  </bean>
+						                  <bean class="javax.swing.JLabel">
+						                    <constructor-arg  index="0" value="所属试卷：" />
+						                     <constructor-arg index="1">
+						                        <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+						                    </constructor-arg>
+						                    <property name="preferredSize">
+						                         <bean class="java.awt.Dimension">
+						                             <constructor-arg index="0" value="75" />
+						                             <constructor-arg index="1" value="30" />
+						                         </bean>
+						                    </property>
+						                 </bean>
+						                  <bean class="javax.swing.JComboBox">
+						                     <property name="preferredSize">
+						                         <bean class="java.awt.Dimension">
+						                             <constructor-arg index="0" value="168" />
+						                             <constructor-arg index="1" value="30" />
+						                         </bean>
+						                     </property>
+						                 </bean>
+						                  <bean class="javax.swing.JLabel">
+						                    <constructor-arg index="0" value="试卷结构：" />
+						                    <constructor-arg index="1">
+						                        <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+						                    </constructor-arg>
+						                    <property name="preferredSize">
+						                         <bean class="java.awt.Dimension">
+						                             <constructor-arg index="0" value="75" />
+						                             <constructor-arg index="1" value="30" />
+						                         </bean>
+						                    </property>
+						                 </bean>
+						                  <bean class="javax.swing.JComboBox">
+						                     <property name="preferredSize">
+						                         <bean class="java.awt.Dimension">
+						                             <constructor-arg index="0" value="168" />
+						                             <constructor-arg index="1" value="30" />
+						                         </bean>
+						                     </property>
+						                 </bean>
+				                     </list>
+				                 </property>
+			                </bean>
+			            </entry>
+			            <entry key="Center">
+			                <bean class="javax.swing.JScrollPane">
+			                    <constructor-arg>
+			                        <bean class="javax.swing.JTextArea">
+				                         <property name="lineWrap" value="true" /><!-- 自动换行 -->
+				                         <property name="border">
+				                             <bean class="javax.swing.border.EtchedBorder">
+				                                 <constructor-arg index="0" value="1"/>
+				                                 <constructor-arg index="1">
+				                                     <util:constant static-field="java.awt.Color.RED" />
+				                                 </constructor-arg>
+				                                 <constructor-arg index="2">
+				                                     <util:constant static-field="java.awt.Color.GREEN"/>
+				                                 </constructor-arg>
+				                             </bean>
+				                         </property>
+				                         <property name="componentPopupMenu">
+				                             <bean class="com.examw.test.imports.view.PopupMenu">
+				                                 <property name="items">
+				                                     <list>
+				                                         <bean class="javax.swing.JMenuItem">
+				                                             <constructor-arg type="String" value="复制" />
+				                                             <property name="accelerator">
+				                                                 <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
+				                                                     <constructor-arg type="Character" value="C" />
+				                                                     <constructor-arg type="int">
+				                                                         <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
+				                                                     </constructor-arg>
+				                                                 </bean>
+				                                             </property>
+				                                         </bean>
+				                                     </list>
+				                                 </property>
+				                             </bean>
+				                         </property>
+				                     </bean>
+			                    </constructor-arg>
+			                </bean>
+			            </entry>
+			        </map>
+			    </property>
 			</bean>
 </beans>
