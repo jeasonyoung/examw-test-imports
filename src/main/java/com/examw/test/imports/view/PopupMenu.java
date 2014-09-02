@@ -17,11 +17,15 @@ public class PopupMenu extends JPopupMenu {
 	 *  设置菜单集合。
 	 * @param items
 	 */
-	public void setItems(List<JMenuItem> items){
+	public void setItems(List<Object> items){
 		if(items == null || items.size() == 0) return;
-		for(JMenuItem item : items){
-			if(item == null) continue;
-			this.add(item);
+		for(Object obj :  items){
+			if(obj == null) continue;
+			if(obj instanceof JMenuItem){
+				this.add((JMenuItem)obj);
+			}else if(obj instanceof JPopupMenu.Separator){
+				this.add((JPopupMenu.Separator)obj);
+			}
 		}
 	}
 }

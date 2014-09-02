@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 主窗体界面 -->
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	         xmlns:context="http://www.springframework.org/schema/context"
+	         xmlns:util="http://www.springframework.org/schema/util"
+	         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		                                       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		                                       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+	<!-- 主界面 -->
+	<bean id="mainFrameView" class="com.examw.test.imports.view.MainFrame" init-method="init">
+	    <constructor-arg index="0" value="${main_title}" />
+	    <constructor-arg index="1" value="${main_width}" />
+	    <constructor-arg index="2" value="${main_height}" />
+	    <!-- 设置布局 -->
+	    <property name="layout">
+	        <bean class="java.awt.BorderLayout" />
+	    </property>
+	    <!-- 主界面成员集合 -->
+	    <property name="members">
+	        <map>
+	            <entry key="North">
+	                <ref bean="mainTopMenu"/>
+	            </entry>
+	            <entry key="Center">
+	                 <ref bean="mainWorkspace"/>
+	            </entry>
+	            <entry key="South">
+	                <bean class="javax.swing.JLabel">
+	                    <constructor-arg index="0" value="当前状态：xxx-   " />
+	                    <constructor-arg index="1">
+	                        <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+	                    </constructor-arg>
+	                    <property name="preferredSize">
+	                         <bean class="java.awt.Dimension">
+	                             <constructor-arg index="0" value="368" />
+	                             <constructor-arg index="1" value="30" />
+	                         </bean>
+	                    </property>
+	                </bean>
+	            </entry>
+	        </map>
+	    </property>
+	    <!-- 用户鉴权 -->
+	    <property name="userAuthentication" ref="userAuthentication" />
+	    <!-- 登录界面 -->
+	    <property name="loginDialog" ref="loginDialgView" />
+	    <property name="closeDialogTitle" value="${main_close_title}" /><!-- 关闭窗口时对话框标题 -->
+	    <property name="closeDialogMessage" value="${main_close_message}" /><!-- 关闭窗口时对话框内容 -->
+	</bean>
+</beans>
