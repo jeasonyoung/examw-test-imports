@@ -10,7 +10,7 @@ import com.examw.test.imports.model.KeyValue;
  */
 public interface ItemTypeRemoteDataService {
 	/**
-	 * 下载题型数据。
+	 * 加载题型数据。
 	 * @return
 	 */
 	List<KeyValue> loadItemTypes();

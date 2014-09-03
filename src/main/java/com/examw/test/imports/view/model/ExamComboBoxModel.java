@@ -30,8 +30,8 @@ public class ExamComboBoxModel extends DefaultComboBoxModel<KeyValue> implements
 	 */
 	@Override
 	public void loadRemoteData(String[] parameters) {
+		if(this.getSize() > 0) this.removeAllElements();
 		if(this.examRemoteDataService != null){
-			if(this.getSize() > 0) this.removeAllElements();
 			List<KeyValue> exams = this.examRemoteDataService.loadExams();
 			if(exams != null && exams.size() > 0){
 				for(KeyValue entry : exams){
