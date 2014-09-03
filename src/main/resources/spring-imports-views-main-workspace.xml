@@ -119,6 +119,7 @@
       <!--所属考试下拉处理模型 -->
      <bean id="examComboBoxModel" class="com.examw.test.imports.view.model.ExamComboBoxModel">
          <property name="examRemoteDataService" ref="clientService" />
+         <property name="paperOPService" ref="paperComboBoxModel" />
      </bean>
      <!-- 所属试卷下拉处理模型 -->
      <bean id="paperComboBoxModel" class="com.examw.test.imports.view.model.PaperComboBoxModel">
