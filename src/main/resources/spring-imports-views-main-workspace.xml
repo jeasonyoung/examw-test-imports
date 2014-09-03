@@ -16,10 +16,14 @@
 	    <property name="memberMap">
 	        <map>
 	            <entry key="North">
-	               <ref local="examInfoArea"/>
+	                <ref local="examInfoArea" />
 	            </entry>
 	            <entry key="Center">
-	                <ref local="workspaceArea"/>
+				     <bean class="javax.swing.JScrollPane">
+				          <constructor-arg>
+				             <ref local="workspaceTextArea"/>
+				          </constructor-arg>
+				      </bean>
 	            </entry>
 	        </map>
 	    </property>
@@ -27,7 +31,7 @@
     <!-- 题库信息区域 -->
      <bean id="examInfoArea" class="com.examw.test.imports.view.ContentPanel">
          <constructor-arg>
-           <bean class="java.awt.FlowLayout">
+           <bean class="com.examw.test.imports.view.EnhancedFlowLayout">
                <constructor-arg type="int">
                    <util:constant static-field="java.awt.FlowLayout.LEFT"/>
                </constructor-arg>
@@ -35,23 +39,23 @@
        </constructor-arg>
        <property name="memberList">
            <list>
-	               <bean class="javax.swing.JLabel">
-			            <constructor-arg index="0" value="${main_workspace_exam}" /><!--  所属考试 -->
-			            <constructor-arg index="1">
-			                <util:constant static-field="javax.swing.JLabel.RIGHT"/>
-			            </constructor-arg>
-			            <property name="preferredSize">
-			                 <bean class="java.awt.Dimension">
-			                     <constructor-arg index="0" value="75" />
-			                     <constructor-arg index="1" value="30" />
-			                 </bean>
-			            </property>
+               <bean class="javax.swing.JLabel">
+		            <constructor-arg index="0" value="${main_workspace_exam}" /><!--  所属考试 -->
+		            <constructor-arg index="1">
+		                <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+		            </constructor-arg>
+		            <property name="preferredSize">
+		                 <bean class="java.awt.Dimension">
+		                     <constructor-arg index="0" value="${main_workspace_label_width}" />
+		                     <constructor-arg index="1" value="${main_workspace_label_height}" />
+		                 </bean>
+		            </property>
 		         </bean>
 		         <bean class="javax.swing.JComboBox">
 		             <property name="preferredSize">
 		                 <bean class="java.awt.Dimension">
-		                     <constructor-arg index="0" value="168" />
-		                     <constructor-arg index="1" value="30" />
+		                     <constructor-arg index="0" value="${main_workspace_combobox_width}" />
+		                     <constructor-arg index="1" value="${main_workspace_combobox_height}" />
 		                 </bean>
 		             </property>
 		          </bean>
@@ -62,16 +66,16 @@
 		            </constructor-arg>
 		            <property name="preferredSize">
 		                 <bean class="java.awt.Dimension">
-		                     <constructor-arg index="0" value="75" />
-		                     <constructor-arg index="1" value="30" />
+		                     <constructor-arg index="0" value="${main_workspace_label_width}" />
+		                     <constructor-arg index="1" value="${main_workspace_label_height}" />
 		                 </bean>
 		            </property>
 		         </bean>
 		         <bean class="javax.swing.JComboBox">
 		             <property name="preferredSize">
 		                 <bean class="java.awt.Dimension">
-		                     <constructor-arg index="0" value="168" />
-		                     <constructor-arg index="1" value="30" />
+		                     <constructor-arg index="0" value="${main_workspace_combobox_width}" />
+		                     <constructor-arg index="1" value="${main_workspace_combobox_height}" />
 		                 </bean>
 		             </property>
 		         </bean>
@@ -82,28 +86,44 @@
 				   </constructor-arg>
 				   <property name="preferredSize">
 				        <bean class="java.awt.Dimension">
-				            <constructor-arg index="0" value="75" />
-				            <constructor-arg index="1" value="30" />
+				            <constructor-arg index="0" value="${main_workspace_label_width}" />
+				            <constructor-arg index="1" value="${main_workspace_label_height}" />
 				        </bean>
 				   </property>
 				</bean>
 	          <bean class="javax.swing.JComboBox">
 	             <property name="preferredSize">
 	                 <bean class="java.awt.Dimension">
-	                     <constructor-arg index="0" value="168" />
-	                     <constructor-arg index="1" value="30" />
+	                     <constructor-arg index="0" value="${main_workspace_combobox_width}" />
+	                     <constructor-arg index="1" value="${main_workspace_combobox_height}" />
 	                 </bean>
 	             </property>
 	         </bean>
+	         <!-- 题型 -->
+	         <ref local="itemTypePanel"/>
            </list>
        </property>
      </bean>
-     <!-- workspace -->
-     <bean id="workspaceArea" class="javax.swing.JScrollPane">
-          <constructor-arg>
-             <ref local="workspaceTextArea"/>
-          </constructor-arg>
-      </bean>
+     <!--  题型面板 -->
+     <bean id="itemTypePanel" class="com.examw.test.imports.view.ItemTypePanel">
+         <property name="itemTypeService" ref="clientService" /><!-- 加载题型服务 -->
+         <property name="memberList">
+             <list>
+                 <bean class="javax.swing.JLabel">
+		            <constructor-arg  index="0" value="所属题型：" /><!-- 所属题型 -->
+		             <constructor-arg index="1">
+		                <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+		            </constructor-arg>
+		            <property name="preferredSize">
+		                 <bean class="java.awt.Dimension">
+		                     <constructor-arg index="0" value="${main_workspace_label_width}" />
+		                     <constructor-arg index="1" value="${main_workspace_label_height}" />
+		                 </bean>
+		            </property>
+		         </bean>
+             </list>
+         </property>
+     </bean>
       <!-- 文本工作区域 -->
       <bean id="workspaceTextArea"  class="javax.swing.JTextArea">
           <property name="lineWrap" value="true" /><!-- 自动换行 -->

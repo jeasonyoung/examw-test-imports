@@ -6,8 +6,8 @@
 	         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		                                       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">                                   
 		                                       
-		<!-- 用户鉴权 -->
-		<bean id="userAuthentication" class="com.examw.test.imports.shiro.service.impl.UserAuthenticationImpl">
+		<!-- 客户端服务 -->
+		<bean id="clientService" class="com.examw.test.imports.service.impl.DefaultClientServiceImpl">
 		    
 		</bean>
 </beans>

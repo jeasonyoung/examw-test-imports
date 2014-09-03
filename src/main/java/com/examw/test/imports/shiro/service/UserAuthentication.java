@@ -5,7 +5,7 @@ package com.examw.test.imports.shiro.service;
  * @author yangyong
  * @since 2014年8月27日
  */
-public interface IUserAuthentication {
+public interface UserAuthentication {
 	/**
 	 * 鉴权。
 	 * @return

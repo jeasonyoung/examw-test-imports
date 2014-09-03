@@ -42,7 +42,7 @@
 	        </map>
 	    </property>
 	    <!-- 用户鉴权 -->
-	    <property name="userAuthentication" ref="userAuthentication" />
+	    <property name="userAuthentication" ref="clientService" />
 	    <!-- 登录界面 -->
 	    <property name="loginDialog" ref="loginDialgView" />
 	    <property name="closeDialogTitle" value="${main_close_title}" /><!-- 关闭窗口时对话框标题 -->

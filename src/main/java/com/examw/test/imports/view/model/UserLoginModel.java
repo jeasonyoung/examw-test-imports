@@ -2,6 +2,7 @@ package com.examw.test.imports.view.model;
  
 import java.awt.Color;
 import java.awt.event.ActionEvent; 
+import java.util.List;
 
 import javax.swing.DefaultButtonModel; 
 import javax.swing.JOptionPane;
@@ -10,7 +11,8 @@ import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
-import com.examw.test.imports.shiro.service.IUserAuthentication;
+import com.examw.test.imports.service.OPService;
+import com.examw.test.imports.shiro.service.UserAuthentication;
 import com.examw.test.imports.view.MainFrame;
 import com.examw.test.imports.view.UserLoginDialog;
 
@@ -20,14 +22,15 @@ import com.examw.test.imports.view.UserLoginDialog;
  * @author yangyong
  * @since 2014年8月29日
  */
-public class UserLoginButtonModel extends DefaultButtonModel {
+public class UserLoginModel extends DefaultButtonModel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(UserLoginButtonModel.class);
+	private static final Logger logger = Logger.getLogger(UserLoginModel.class);
 	private JTextField usernameField,passwordField;
 	private UserLoginDialog loginDialog;
 	private MainFrame mainFrame;
-	private IUserAuthentication userAuthentication;
+	private UserAuthentication userAuthentication;
 	private Color oldColor;
+	private List<OPService> opServices;
 	/**
 	 * 设置用户名文本输入框。
 	 * @param usernameField 
@@ -65,8 +68,16 @@ public class UserLoginButtonModel extends DefaultButtonModel {
 	 * @param userAuthentication 
 	 *	  用户认证接口。
 	 */
-	public void setUserAuthentication(IUserAuthentication userAuthentication) {
+	public void setUserAuthentication(UserAuthentication userAuthentication) {
 		this.userAuthentication = userAuthentication;
+	}
+	/**
+	 * 设置题型操作服务。
+	 * @param itemTypeOPService 
+	 *	  题型操作服务。
+	 */
+	public void setOPServices(List<OPService> opServices) {
+		this.opServices = opServices;
 	}
 	/*
 	 * 事件重载。
@@ -84,6 +95,12 @@ public class UserLoginButtonModel extends DefaultButtonModel {
 					this.setEnabled(false);
 				    boolean success =	this.userAuthentication.authenticated(username, password);
 				    if(success){
+				    	if(this.opServices != null && this.opServices.size() > 0){
+				    		for(OPService opService : this.opServices){
+				    			if(opService == null) continue;
+				    			opService.loadRemoteData(null);
+				    		}
+				    	}
 				    	this.loginDialog.setVisible(false);
 				    	this.mainFrame.setVisible(true);
 				    }

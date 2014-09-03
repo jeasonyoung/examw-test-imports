@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
-import com.examw.test.imports.shiro.service.IUserAuthentication;
+import com.examw.test.imports.shiro.service.UserAuthentication;
 import com.examw.test.imports.support.ViewUtils;
 /**
  * 主窗体界面。
@@ -22,7 +22,7 @@ import com.examw.test.imports.support.ViewUtils;
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(MainFrame.class);
-	private IUserAuthentication userAuthentication;
+	private UserAuthentication userAuthentication;
 	private JDialog loginDialog;
 	private String closeDialogMessage,closeDialogTitle;
 	/**
@@ -43,7 +43,7 @@ public class MainFrame extends JFrame {
 	 * @param userAuthentication 
 	 *	  userAuthentication
 	 */
-	public void setUserAuthentication(IUserAuthentication userAuthentication) {
+	public void setUserAuthentication(UserAuthentication userAuthentication) {
 		this.userAuthentication = userAuthentication;
 	}
 	/**

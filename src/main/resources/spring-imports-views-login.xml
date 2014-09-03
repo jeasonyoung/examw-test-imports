@@ -84,12 +84,17 @@
 	                <bean class="javax.swing.JButton">
                           <constructor-arg type="String" value="${login_submit_title}" />
                           <property name="model"><!-- 按钮动作处理 -->
-                              <bean class="com.examw.test.imports.view.model.UserLoginButtonModel">
+                              <bean class="com.examw.test.imports.view.model.UserLoginModel">
                                   <property name="usernameField" ref="loginUsername" /><!-- 用户名 -->
                                   <property name="passwordField" ref="loginPassword" /><!-- 用户密码 -->
                                   <property name="loginDialog" ref="loginDialgView" /><!-- 登录窗口 -->
                                   <property name="mainFrame" ref="mainFrameView" /><!-- 主窗体 -->
-					  		<property name="userAuthentication" ref="userAuthentication" /><!-- 用户鉴权 -->
+					  			  <property name="userAuthentication" ref="clientService" /><!-- 用户鉴权 -->
+					  			  <property name="OPServices">
+					  			      <list>
+					  			          <ref bean="itemTypePanel"/><!-- 加载题型 -->
+					  			      </list>
+					  			  </property>
                               </bean>
                           </property>
                       </bean>
