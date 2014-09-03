@@ -3,6 +3,7 @@ package com.examw.test.imports.view;
 import java.awt.FlowLayout;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractButton;
@@ -10,9 +11,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 
+import com.examw.test.imports.model.KeyValue;
 import com.examw.test.imports.service.ItemTypeOPService;
 import com.examw.test.imports.service.ItemTypeRemoteDataService;
-
 /**
  * 题型面板。
  * 
@@ -23,7 +24,7 @@ public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 	private static final long serialVersionUID = 1L;
 	private ItemTypeRemoteDataService itemTypeService;
 	private ButtonGroup group;
-	private Map<Integer, ItemTypeRadioModel> itemTypeMap;
+	private Map<String, ItemTypeRadioModel> itemTypeMap;
 	/**
 	 * 构造函数。
 	 */
@@ -58,9 +59,9 @@ public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 			}
 		}
 		if(this.itemTypeService == null) return;
-		Map<Integer, String> itemTypes = this.itemTypeService.downloadData();
+		List<KeyValue> itemTypes = this.itemTypeService.loadItemTypes();
 		if(itemTypes != null){
-			for(Map.Entry<Integer, String> entry : itemTypes.entrySet()){
+			for(KeyValue entry : itemTypes){
 				if(entry == null) continue;
 				ItemTypeRadioModel model = new ItemTypeRadioModel(entry.getKey());
 				this.itemTypeMap.put(entry.getKey(), model);
@@ -77,7 +78,7 @@ public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 	 * @param itemTypeValue
 	 */
 	@Override
-	public void setSelected(Integer itemTypeValue){
+	public void setSelected(String itemTypeValue){
 		if(itemTypeValue == null || this.itemTypeMap.size() == 0) return;
 		ItemTypeRadioModel model = this.itemTypeMap.get(itemTypeValue);
 		if(model != null){
@@ -89,7 +90,7 @@ public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 	 * @return
 	 */
 	@Override
-	public Integer getSelected(){
+	public String getSelected(){
 		if(this.itemTypeMap.size() == 0) return null;
 		ItemTypeRadioModel model = (ItemTypeRadioModel)this.group.getSelection();
 		if(model != null) return model.getValue();
@@ -103,12 +104,12 @@ public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 	 */
 	 class ItemTypeRadioModel extends JToggleButton.ToggleButtonModel{
 		private static final long serialVersionUID = 1L;
-		private Integer value;
+		private String value;
 		/**
 		 * 构造函数。
 		 * @param value
 		 */
-		public ItemTypeRadioModel(Integer value){
+		public ItemTypeRadioModel(String value){
 			super();
 			this.value = value;
 		}
@@ -116,7 +117,7 @@ public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 		 * 获取题型值。
 		 * @return 题型值。
 		 */
-		public Integer getValue() {
+		public String getValue() {
 			return value;
 		}
 	}

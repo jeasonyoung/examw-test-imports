@@ -11,10 +11,10 @@ public interface ItemTypeOPService extends OPService {
 	 * @param value
 	 * 题型值。
 	 */
-	void setSelected(Integer value);
+	void setSelected(String value);
 	/**
 	 * 获取选中的题型值。
 	 * @return 题型值。
 	 */
-	Integer getSelected();
+	String getSelected();
 }

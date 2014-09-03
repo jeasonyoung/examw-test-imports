@@ -52,11 +52,17 @@
 		            </property>
 		         </bean>
 		         <bean class="javax.swing.JComboBox">
+		             <constructor-arg>
+		                 <ref local="examComboBoxModel"/>
+		             </constructor-arg>
 		             <property name="preferredSize">
 		                 <bean class="java.awt.Dimension">
 		                     <constructor-arg index="0" value="${main_workspace_combobox_width}" />
 		                     <constructor-arg index="1" value="${main_workspace_combobox_height}" />
 		                 </bean>
+		             </property>
+		             <property name="renderer">
+		                 <bean class="com.examw.test.imports.view.KeyValueCellRenderer" />
 		             </property>
 		          </bean>
 		          <bean class="javax.swing.JLabel">
@@ -103,6 +109,10 @@
 	         <ref local="itemTypePanel"/>
            </list>
        </property>
+     </bean>
+      <!--所属考试下拉处理模型 -->
+     <bean id="examComboBoxModel" class="com.examw.test.imports.view.model.ExamComboBoxModel">
+         <property name="examRemoteDataService" ref="clientService" />
      </bean>
      <!--  题型面板 -->
      <bean id="itemTypePanel" class="com.examw.test.imports.view.ItemTypePanel">
@@ -214,7 +224,13 @@
                               </constructor-arg>
                           </bean>
                       </property>
-                      <!-- <property name="model" ref="rightHandlerModel"/>菜单处理模型 -->
+                      <property name="model">
+                          <bean class="com.examw.test.imports.view.model.RightMenuFormatModel">
+                              <constructor-arg ref="workspaceTextArea" />
+                              <property name="itemTypeOPService" ref="itemTypePanel" />
+                              <property name="examOPService" ref="examComboBoxModel" />
+                          </bean>
+                      </property>
                   </bean>
                   <bean class="javax.swing.JPopupMenu.Separator" /><!-- 分隔 -->
                   <bean class="javax.swing.JMenuItem">

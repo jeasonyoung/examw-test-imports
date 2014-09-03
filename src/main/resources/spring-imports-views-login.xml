@@ -93,6 +93,7 @@
 					  			  <property name="OPServices">
 					  			      <list>
 					  			          <ref bean="itemTypePanel"/><!-- 加载题型 -->
+					  			          <ref bean="examComboBoxModel"/> <!-- 加载所属考试 -->
 					  			      </list>
 					  			  </property>
                               </bean>

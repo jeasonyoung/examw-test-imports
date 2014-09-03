@@ -1,21 +1,22 @@
 package com.examw.test.imports.service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
+import com.examw.test.imports.model.KeyValue;
+import com.examw.test.imports.service.ExamRemoteDataService;
 import com.examw.test.imports.service.ItemTypeRemoteDataService;
 import com.examw.test.imports.shiro.service.UserAuthentication;
-
 /**
  *  客户端服务实现。
  * 
  * @author yangyong
  * @since 2014年9月3日
  */
-public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemoteDataService {
+public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemoteDataService,ExamRemoteDataService {
 	/*
 	 * 用户是否登录。
 	 * @see com.examw.test.imports.shiro.service.IUserAuthentication#isAuthenticated()
@@ -34,15 +35,27 @@ public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemo
 		return true;
 	}
 	/*
-	 * 下载题型数据。
+	 * 加载题型数据。
 	 * @see com.examw.test.imports.service.IItemTypeService#downloadData()
 	 */
 	@Override
-	public Map<Integer, String> downloadData() {
-		Map<Integer, String> map = new HashMap<Integer, String>();
-		map.put(1, "单选");
-		map.put(2, "多选");
-		map.put(3, "不定向选");
-		return map;
+	public List<KeyValue> loadItemTypes() {
+		List<KeyValue> list = new ArrayList<>();
+		list.add(new KeyValue("1", "单选"));
+		list.add(new KeyValue("2", "多选"));
+		list.add(new KeyValue("3", "不定向选"));
+		return list;
+	}
+	/*
+	 * 加载考试数据。
+	 * @see com.examw.test.imports.service.ExamRemoteDataService#loadExams()
+	 */
+	@Override
+	public List<KeyValue>  loadExams() {
+		List<KeyValue> list = new ArrayList<>();
+		list.add(new KeyValue("1234567890121", "考试测试1"));
+		list.add(new KeyValue("1234567890122", "考试测试2"));
+		list.add(new KeyValue("1234567890123", "考试测试3"));
+		return list;
 	}
 }
