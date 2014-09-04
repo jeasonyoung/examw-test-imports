@@ -104,11 +104,17 @@
 				   </property>
 				</bean>
 	          <bean class="javax.swing.JComboBox">
+	             <constructor-arg>
+	                  <ref local="paperStructureComboBoxModel" />
+	              </constructor-arg>
 	             <property name="preferredSize">
 	                 <bean class="java.awt.Dimension">
 	                     <constructor-arg index="0" value="${main_workspace_combobox_width}" />
 	                     <constructor-arg index="1" value="${main_workspace_combobox_height}" />
 	                 </bean>
+	             </property>
+	              <property name="renderer">
+	                 <bean class="com.examw.test.imports.view.KeyValueCellRenderer" />
 	             </property>
 	         </bean>
 	         <!-- 题型 -->
@@ -124,6 +130,12 @@
      <!-- 所属试卷下拉处理模型 -->
      <bean id="paperComboBoxModel" class="com.examw.test.imports.view.model.PaperComboBoxModel">
          <property name="paperRemoteDataService" ref="clientService" />
+         <property name="paperStructureOPService" ref="paperStructureComboBoxModel" />
+     </bean>
+     <!-- 所属试卷结构下拉处理模型 -->
+     <bean id="paperStructureComboBoxModel" class="com.examw.test.imports.view.model.PaperStructureComboBoxModel">
+         <property name="paperStructureRemoteDataService" ref="clientService" />
+         <property name="itemTypeOPService" ref="itemTypePanel" />
      </bean>
      <!--  题型面板 -->
      <bean id="itemTypePanel" class="com.examw.test.imports.view.ItemTypePanel">

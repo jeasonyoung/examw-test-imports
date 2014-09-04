@@ -7,6 +7,7 @@ import javax.swing.DefaultComboBoxModel;
 import com.examw.test.imports.model.KeyValue;
 import com.examw.test.imports.service.PaperOPService;
 import com.examw.test.imports.service.PaperRemoteDataService;
+import com.examw.test.imports.service.PaperStructureOPService;
 
 /**
  * 所属试卷下拉列表处理模型。
@@ -17,6 +18,7 @@ import com.examw.test.imports.service.PaperRemoteDataService;
 public class PaperComboBoxModel extends DefaultComboBoxModel<KeyValue> implements PaperOPService {
 	private static final long serialVersionUID = 1L;
 	private PaperRemoteDataService paperRemoteDataService;
+	private PaperStructureOPService paperStructureOPService;
 	/**
 	 * 设置试卷远程数据服务接口。
 	 * @param paperRemoteDataService 
@@ -24,6 +26,14 @@ public class PaperComboBoxModel extends DefaultComboBoxModel<KeyValue> implement
 	 */
 	public void setPaperRemoteDataService(PaperRemoteDataService paperRemoteDataService) {
 		this.paperRemoteDataService = paperRemoteDataService;
+	}
+	/**
+	 * 设置试卷结构操作服务接口。
+	 * @param paperStructureOPService 
+	 *	  试卷结构操作服务接口。
+	 */
+	public void setPaperStructureOPService(PaperStructureOPService paperStructureOPService) {
+		this.paperStructureOPService = paperStructureOPService;
 	}
 	/*
 	 * 加载远程数据。
@@ -50,5 +60,17 @@ public class PaperComboBoxModel extends DefaultComboBoxModel<KeyValue> implement
 		KeyValue kv = (KeyValue)this.getSelectedItem();
 		if(kv != null) return kv.getKey();
 		return null;
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.AbstractListModel#fireContentsChanged(java.lang.Object, int, int)
+	 */
+	@Override
+	protected void fireContentsChanged(Object source, int index0, int index1) {
+		super.fireContentsChanged(source, index0, index1);
+		PaperComboBoxModel model = (PaperComboBoxModel)source;
+		if(model != null &&  this.paperStructureOPService != null){ 
+			this.paperStructureOPService.loadRemoteData(new String[]{ model.getSelected() }); 
+		}
 	}
 }

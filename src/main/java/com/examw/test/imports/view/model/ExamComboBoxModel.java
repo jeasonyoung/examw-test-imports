@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
-import org.springframework.util.StringUtils;
-
 import com.examw.test.imports.model.KeyValue;
 import com.examw.test.imports.service.ExamOPService;
 import com.examw.test.imports.service.ExamRemoteDataService;
@@ -70,11 +68,8 @@ public class ExamComboBoxModel extends DefaultComboBoxModel<KeyValue> implements
 	protected void fireContentsChanged(Object source, int index0, int index1) {
 		super.fireContentsChanged(source, index0, index1);
 		ExamComboBoxModel model = (ExamComboBoxModel)source;
-		if(model != null){
-			String examId = model.getSelected();
-			if(!StringUtils.isEmpty(examId) && this.paperOPService != null){
-				this.paperOPService.loadRemoteData(new String[]{ examId });
-			}
+		if(model != null && this.paperOPService != null){ 
+				this.paperOPService.loadRemoteData(new String[]{ model.getSelected() }); 
 		}
 	}
 }
