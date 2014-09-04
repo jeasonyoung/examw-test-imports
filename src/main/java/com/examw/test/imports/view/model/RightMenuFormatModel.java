@@ -1,9 +1,13 @@
 package com.examw.test.imports.view.model;
 
+import java.util.Map;
+
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
-import com.examw.test.imports.service.ExamOPService;
+import org.springframework.util.StringUtils;
+
+import com.examw.test.imports.service.ItemTypeFormat;
 import com.examw.test.imports.service.ItemTypeOPService;
 
 /**
@@ -15,7 +19,7 @@ import com.examw.test.imports.service.ItemTypeOPService;
 public class RightMenuFormatModel extends RightMenuBaseModel {
 	private static final long serialVersionUID = 1L;
 	private ItemTypeOPService itemTypeOPService;
-	private ExamOPService examOPService;
+	private Map<String, ItemTypeFormat> formats;
 	/**
 	 * 构造函数。
 	 * @param textArea
@@ -32,12 +36,12 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 		this.itemTypeOPService = itemTypeOPService;
 	}
 	/**
-	 * 设置所属考试服务接口。
-	 * @param examOPService 
-	 *	  所属考试服务接口。
+	 * 设置格式化处理集合。
+	 * @param formats 
+	 *	  formats
 	 */
-	public void setExamOPService(ExamOPService examOPService) {
-		this.examOPService = examOPService;
+	public void setFormats(Map<String, ItemTypeFormat> formats) {
+		this.formats = formats;
 	}
 	/*
 	 * (non-Javadoc)
@@ -45,14 +49,25 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 	 */
 	@Override
 	protected void handler() {
-		String itemTypeValue = null;
-		if(this.itemTypeOPService != null){
-			itemTypeValue = this.itemTypeOPService.getSelected();
+		if(this.itemTypeOPService == null){
+			JOptionPane.showMessageDialog(this.textArea, "未配置题型操作！", "错误", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
-		if(this.examOPService != null){
-			itemTypeValue += ",||," + this.examOPService.getSelected();
+		String itemTypeValue = this.itemTypeOPService.getSelected();
+		if(StringUtils.isEmpty(itemTypeValue)){
+			JOptionPane.showMessageDialog(this.textArea, "请选择题型！", "警告", JOptionPane.WARNING_MESSAGE);
+			return;
 		}
-		JOptionPane.showMessageDialog(this.textArea, String.format("题型值＝>%s", itemTypeValue));
-		// TODO Auto-generated method stub
+		ItemTypeFormat format = this.formats.get(itemTypeValue);
+		if(format == null){
+			JOptionPane.showMessageDialog(this.textArea, String.format("未配置题型[type=%s]处理！", itemTypeValue), "警告", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		try {
+			format.format(this.textArea);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this.textArea, String.format("处理题型［type=%1$s］异常：%2$s", itemTypeValue, e.getMessage()), "警告", JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
+		}
 	}
 }

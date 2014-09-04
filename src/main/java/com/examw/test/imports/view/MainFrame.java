@@ -113,7 +113,7 @@ public class MainFrame extends JFrame {
 	protected void processWindowEvent(WindowEvent e) {
 		if(e.getID() == WindowEvent.WINDOW_CLOSING){
 			if(logger.isDebugEnabled()) logger.debug("捕获主窗体关闭事件！");
-			if(JOptionPane.showConfirmDialog(this, this.closeDialogMessage,this.closeDialogTitle, JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION){
+			if(JOptionPane.showConfirmDialog(this, this.closeDialogMessage,this.closeDialogTitle, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION){
 				return;
 			}
 			if(logger.isDebugEnabled()) logger.debug("退出程序！");

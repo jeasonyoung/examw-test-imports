@@ -76,7 +76,7 @@ public class UserLoginDialog extends JDialog {
 	protected void processWindowEvent(WindowEvent e) {
 		if(e.getID() == WindowEvent.WINDOW_CLOSING){
 			if(logger.isDebugEnabled()) logger.debug("捕获登录界面窗体关闭事件！");
-			if(JOptionPane.showConfirmDialog(this, this.closeDialogMessage,this.closeDialogTitle, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+			if(JOptionPane.showConfirmDialog(this, this.closeDialogMessage,this.closeDialogTitle, JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION){
 				if(logger.isDebugEnabled()) logger.debug("退出程序！");
 				System.exit(0);
 			}
