@@ -4,10 +4,14 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 
 /**
  * 客户端用户认证。
@@ -33,17 +37,11 @@ public class ClientUserRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		
 		logger.debug(String.format("token:[%s]", token.getClass()));
-		
-		 Object p =  token.getPrincipal(),
-		  c = token.getCredentials();
-		 
-		 logger.debug(String.format("token-Principal: [%1$s]   token-Credentials: [%2$s]", p.getClass(), c.getClass()));
-				     
-		
-		// TODO Auto-generated method stub
-		return null;
+		UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken)token;
+		String username = usernamePasswordToken.getUsername(),
+				  pwd = new SimpleHash("md5", new String(usernamePasswordToken.getPassword()), ByteSource.Util.bytes(username), 2).toHex();
+		//交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配。
+		return new SimpleAuthenticationInfo(username,pwd,ByteSource.Util.bytes(username),this.getName());
 	}
-
 }

@@ -19,6 +19,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 /**
  * HTTP工具类。
@@ -26,6 +27,7 @@ import org.springframework.util.StringUtils;
  * @since 2014-03-01.
  * */
 public final class HttpUtil {
+	private static final Logger logger = Logger.getLogger(HttpUtil.class);
 	/**
 	 * 发起http请求获取反馈。
 	 * @param connection
@@ -43,6 +45,7 @@ public final class HttpUtil {
 	 * @throws IOException 
 	 * */
 	public static String sendRequest(HttpURLConnection connection,Map<String, String> headers, String method, String data,String charsetName) throws IOException{
+		if(logger.isDebugEnabled()) logger.debug(String.format("发起HTTP请求:[method=>%1$s][data=>%2$s][charsetName=>%3$s]", method, data,charsetName));
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
 		//头信息。
@@ -77,7 +80,7 @@ public final class HttpUtil {
 		//释放资源
 		bufferedReader.close();
 		connection.disconnect();
-		
+		if(logger.isDebugEnabled()) logger.debug("反馈数据=>" + builder);
 		return builder.toString();
 	}
 	/**
@@ -117,6 +120,7 @@ public final class HttpUtil {
 	 * @throws KeyManagementException 
 	 * */
 	public static String sendRequest(X509TrustManager x509TrustManager,String url, String method,String data,String charsetName) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException{
+			if(logger.isDebugEnabled()) logger.debug("发起https请求获取反馈信息...");
 			if(x509TrustManager == null) return sendRequest(url, method, data);
 			//创建SSLContext对象，并使用我们指定的信任管理器初始化
 			TrustManager[] tm = {x509TrustManager};
@@ -124,7 +128,7 @@ public final class HttpUtil {
 			sslContext.init(null, tm, new SecureRandom());
 			//从上述SSLContext对象中得到SSLSocketFactory对象。
 			SSLSocketFactory ssf = sslContext.getSocketFactory();
-			
+			if(logger.isDebugEnabled()) logger.debug("Url=>" + url);
 			URL uri = new URL(url);
 			HttpsURLConnection connection = (HttpsURLConnection)uri.openConnection();
 			connection.setSSLSocketFactory(ssf);

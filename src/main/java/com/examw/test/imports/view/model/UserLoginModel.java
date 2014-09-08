@@ -108,7 +108,7 @@ public class UserLoginModel extends DefaultButtonModel {
 					if(logger.isDebugEnabled()) logger.debug(String.format("登录失败！( %s )", e1.getMessage()));
 					JOptionPane.showConfirmDialog(this.loginDialog, e1.getMessage());
 				}finally{
-					this.setEnabled(false);
+					this.setEnabled(true);
 				}
 			}
 		}
