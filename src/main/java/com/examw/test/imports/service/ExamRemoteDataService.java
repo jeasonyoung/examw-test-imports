@@ -16,5 +16,5 @@ public interface ExamRemoteDataService  {
 	 * @return
 	 * 考试数据。
 	 */
-	List<KeyValue> loadExams();
+	List<KeyValue> loadExams() throws Exception;
 }

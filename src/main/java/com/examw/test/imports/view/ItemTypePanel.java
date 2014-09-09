@@ -8,8 +8,11 @@ import java.util.Map;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
+
+import org.apache.log4j.Logger;
 
 import com.examw.test.imports.model.KeyValue;
 import com.examw.test.imports.service.ItemTypeOPService;
@@ -22,6 +25,7 @@ import com.examw.test.imports.service.ItemTypeRemoteDataService;
  */
 public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(ItemTypePanel.class);
 	private ItemTypeRemoteDataService itemTypeService;
 	private ButtonGroup group;
 	private Map<String, ItemTypeRadioModel> itemTypeMap;
@@ -59,7 +63,14 @@ public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 			}
 		}
 		if(this.itemTypeService == null) return;
-		List<KeyValue> itemTypes = this.itemTypeService.loadItemTypes();
+		List<KeyValue> itemTypes = null;
+		try {
+			itemTypes = this.itemTypeService.loadItemTypes();
+		} catch (Exception e) {
+			logger.error("加载远程数据异常：", e);
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, e.getMessage(),"加载题型数据异常", JOptionPane.ERROR_MESSAGE);
+		}
 		if(itemTypes != null){
 			for(KeyValue entry : itemTypes){
 				if(entry == null) continue;

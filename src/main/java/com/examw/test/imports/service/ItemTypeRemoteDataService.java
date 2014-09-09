@@ -13,5 +13,5 @@ public interface ItemTypeRemoteDataService {
 	 * 加载题型数据。
 	 * @return
 	 */
-	List<KeyValue> loadItemTypes();
+	List<KeyValue> loadItemTypes() throws Exception;
 }

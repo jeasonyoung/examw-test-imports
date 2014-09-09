@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
+import org.apache.log4j.Logger;
+
 import com.examw.test.imports.model.KeyValue;
 import com.examw.test.imports.service.PaperOPService;
 import com.examw.test.imports.service.PaperRemoteDataService;
@@ -17,6 +19,7 @@ import com.examw.test.imports.service.PaperStructureOPService;
  */
 public class PaperComboBoxModel extends DefaultComboBoxModel<KeyValue> implements PaperOPService {
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(PaperComboBoxModel.class);
 	private PaperRemoteDataService paperRemoteDataService;
 	private PaperStructureOPService paperStructureOPService;
 	/**
@@ -43,7 +46,13 @@ public class PaperComboBoxModel extends DefaultComboBoxModel<KeyValue> implement
 	public void loadRemoteData(String[] parameters) {
 		if(this.getSize() > 0) this.removeAllElements();
 		if(this.paperRemoteDataService != null){
-			List<KeyValue> papers = this.paperRemoteDataService.loadPapers(parameters == null ? null : parameters[0]);
+			List<KeyValue> papers = null;
+			try {
+				papers = this.paperRemoteDataService.loadPapers(parameters == null ? null : parameters[0]);
+			} catch (Exception e) {
+				logger.error("加载试卷远程数据异常：" + e.getMessage(), e);
+				e.printStackTrace();
+			}
 			if(papers != null && papers.size() > 0){
 				for(KeyValue kv : papers){
 					this.addElement(kv);

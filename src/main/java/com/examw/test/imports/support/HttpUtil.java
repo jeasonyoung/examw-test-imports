@@ -172,6 +172,12 @@ public final class HttpUtil {
 	 * @throws IOException 
 	 * */
 	public static String sendRequest(String url,Map<String, String> headers, String method,String data,String charsetName) throws IOException{
+		if(logger.isDebugEnabled()) {
+			logger.debug(String.format("url=>%1$s", url));
+			logger.debug(String.format("method=>%1$s", method));
+			logger.debug(String.format("data=>%1$s", data));
+			logger.debug(String.format("charsetName=>%1$s", charsetName));
+		}
 		URL uri = new URL(url);
 		HttpURLConnection connection = (HttpURLConnection)uri.openConnection();
 		return sendRequest(connection, headers, method, data,charsetName);

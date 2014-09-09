@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
+import org.apache.log4j.Logger;
+
 import com.examw.test.imports.model.KeyValueType;
 import com.examw.test.imports.service.ItemTypeOPService;
 import com.examw.test.imports.service.PaperStructureOPService;
@@ -17,6 +19,7 @@ import com.examw.test.imports.service.PaperStructureRemoteDataService;
  */
 public class PaperStructureComboBoxModel extends DefaultComboBoxModel<KeyValueType> implements PaperStructureOPService {
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(PaperStructureComboBoxModel.class);
 	private PaperStructureRemoteDataService paperStructureRemoteDataService;
 	private ItemTypeOPService itemTypeOPService;
 	/**
@@ -43,7 +46,13 @@ public class PaperStructureComboBoxModel extends DefaultComboBoxModel<KeyValueTy
 	public void loadRemoteData(String[] parameters) {
 		if(this.getSize() > 0) this.removeAllElements();
 		if(this.paperStructureRemoteDataService != null){
-			List<KeyValueType> structures = this.paperStructureRemoteDataService.loadPaperStructures(parameters == null ? null : parameters[0]);
+			List<KeyValueType> structures = null;
+			try {
+				structures = this.paperStructureRemoteDataService.loadPaperStructures(parameters == null ? null : parameters[0]);
+			} catch (Exception e) {
+				logger.debug("加载试卷结构远程数据异常：" + e.getMessage(), e);
+				e.printStackTrace();
+			}
 			if(structures != null && structures.size() > 0){
 				for(KeyValueType kvt : structures){
 					this.addElement(kvt);

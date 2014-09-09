@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
+import org.apache.log4j.Logger;
+
 import com.examw.test.imports.model.KeyValue;
 import com.examw.test.imports.service.ExamOPService;
 import com.examw.test.imports.service.ExamRemoteDataService;
@@ -16,6 +18,7 @@ import com.examw.test.imports.service.PaperOPService;
  */
 public class ExamComboBoxModel extends DefaultComboBoxModel<KeyValue> implements ExamOPService {
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(ExamComboBoxModel.class);
 	private ExamRemoteDataService examRemoteDataService;
 	private PaperOPService paperOPService;
 	/**
@@ -42,7 +45,13 @@ public class ExamComboBoxModel extends DefaultComboBoxModel<KeyValue> implements
 	public void loadRemoteData(String[] parameters) {
 		if(this.getSize() > 0) this.removeAllElements();
 		if(this.examRemoteDataService != null){
-			List<KeyValue> exams = this.examRemoteDataService.loadExams();
+			List<KeyValue> exams = null;
+			try {
+				exams = this.examRemoteDataService.loadExams();
+			} catch (Exception e) {
+				logger.error("加载远程考试数据异常：" + e.getMessage(), e);
+				e.printStackTrace();
+			}
 			if(exams != null && exams.size() > 0){
 				for(KeyValue entry : exams){
 					this.addElement(entry);

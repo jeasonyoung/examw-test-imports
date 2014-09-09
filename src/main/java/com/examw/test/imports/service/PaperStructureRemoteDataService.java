@@ -17,5 +17,5 @@ public interface PaperStructureRemoteDataService {
 	 * 所属试卷Id。
 	 * @return
 	 */
-	List<KeyValueType> loadPaperStructures(String paperId);
+	List<KeyValueType> loadPaperStructures(String paperId) throws Exception;
 }
