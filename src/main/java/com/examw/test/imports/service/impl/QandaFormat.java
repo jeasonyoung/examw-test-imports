@@ -1,6 +1,6 @@
 package com.examw.test.imports.service.impl;
 
-import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 
 import com.examw.test.imports.service.ItemTypeFormat;
 
@@ -13,7 +13,7 @@ import com.examw.test.imports.service.ItemTypeFormat;
 public class QandaFormat implements ItemTypeFormat {
 	
 	@Override
-	public void format(Document document) {
+	public void format(JTextComponent textComponent) {
 		// TODO Auto-generated method stub
 		
 	}

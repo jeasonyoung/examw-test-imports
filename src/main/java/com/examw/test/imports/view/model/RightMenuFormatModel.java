@@ -64,7 +64,7 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 			return;
 		}
 		try {
-			format.format(this.textComponent.getDocument());
+			format.format(this.textComponent);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this.textComponent, String.format("处理题型［type=%1$s］异常：%2$s", itemTypeValue, e.getMessage()), "警告", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();

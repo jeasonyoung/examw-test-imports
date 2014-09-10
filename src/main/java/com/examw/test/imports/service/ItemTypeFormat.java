@@ -1,6 +1,6 @@
 package com.examw.test.imports.service;
 
-import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 
 /**
  * 题型格式化。
@@ -11,7 +11,7 @@ import javax.swing.text.Document;
 public interface ItemTypeFormat {
 	/**
 	 * 格式化处理。
-	 * @param document
+	 * @param textComponent
 	 */
-	void format(Document document);
+	void format(JTextComponent textComponent);
 }
