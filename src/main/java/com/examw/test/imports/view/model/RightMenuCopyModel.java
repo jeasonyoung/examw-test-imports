@@ -1,6 +1,6 @@
 package com.examw.test.imports.view.model;
 
-import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
 /**
  *  复制
@@ -12,10 +12,10 @@ public class RightMenuCopyModel extends RightMenuBaseModel {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 构造函数。
-	 * @param textArea
+	 * @param textComponent
 	 */
-	public RightMenuCopyModel(JTextArea textArea) {
-		super(textArea);
+	public RightMenuCopyModel(JTextComponent textComponent) {
+		super(textComponent);
 	}
 	/*
 	 * (non-Javadoc)
@@ -23,10 +23,10 @@ public class RightMenuCopyModel extends RightMenuBaseModel {
 	 */
 	@Override
 	protected void handler() {
-		if(this.textArea.getSelectedText() == null){
-			this.textArea.selectAll();
+		if(this.textComponent.getSelectedText() == null){
+			this.textComponent.selectAll();
 		}
-		this.textArea.copy();
+		this.textComponent.copy();
 	}
 
 }

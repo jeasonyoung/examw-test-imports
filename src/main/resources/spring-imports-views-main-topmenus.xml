@@ -23,7 +23,7 @@
                                    <constructor-arg value="${main_top_imports}" />
                                    <property name="model">
                                        <bean class="com.examw.test.imports.view.model.TopMenuImportsModel">
-                                           <property name="textArea" ref="workspaceTextArea" />
+                                           <property name="textComponent" ref="workspaceSourceArea" />
                                            <property name="dialogTitle" value="导入试题" />
                                        </bean>
                                    </property>

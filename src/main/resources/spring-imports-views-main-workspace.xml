@@ -19,11 +19,39 @@
 	                <ref local="examInfoArea" />
 	            </entry>
 	            <entry key="Center">
-				     <bean class="javax.swing.JScrollPane">
-				          <constructor-arg>
-				             <ref local="workspaceTextArea"/>
-				          </constructor-arg>
-				      </bean>
+	                <bean class="com.examw.test.imports.view.TabbedContentPanel">
+	                    <property name="document" ref="sourceDocument" />
+	                    <property name="textComponents">
+	                        <list>
+	                            <ref local="workspaceHtmlArea"/>
+	                        </list>
+	                    </property>
+	                    <property name="tabs">
+	                        <map>
+	                            <entry key="源代码">
+	                                <bean class="javax.swing.JScrollPane">
+							          <constructor-arg>
+							             <ref local="workspaceSourceArea"/>
+							          </constructor-arg>
+							       </bean>
+	                            </entry>
+	                            <entry key="HTML">
+	                                <bean class="javax.swing.JScrollPane">
+	                                    <constructor-arg>
+	                                        <ref local="workspaceHtmlArea"/>
+	                                    </constructor-arg>
+	                                </bean>
+	                            </entry>
+	                            <entry key="上传格式">
+	                                <bean class="javax.swing.JScrollPane">
+							          <constructor-arg>
+							             <ref local="uploadTextArea"/>
+							          </constructor-arg>
+							       </bean>
+	                            </entry>
+	                        </map>
+	                    </property>
+	                </bean>
 	            </entry>
 	        </map>
 	    </property>
@@ -157,142 +185,165 @@
              </list>
          </property>
      </bean>
-      <!-- 文本工作区域 -->
-      <bean id="workspaceTextArea"  class="javax.swing.JTextArea">
+     <!-- 源码文本模型 -->
+     <bean id="sourceDocument" class="javax.swing.text.PlainDocument" />
+      <!-- 源码文本工作区域 -->
+      <bean id="workspaceSourceArea"  class="javax.swing.JTextArea">
+          <property name="lineWrap" value="false" /><!-- 自动换行 -->
+          <property name="border">
+              <bean class="com.examw.test.imports.view.LineNumberBorder" />
+          </property>
+          <property name="document" ref="sourceDocument" />
+          <property name="componentPopupMenu"><!-- 右键菜单 -->
+              <bean class="com.examw.test.imports.view.PopupMenu">
+                  <property name="items">
+                      <list>
+                          <bean class="javax.swing.JMenuItem">
+		                      <constructor-arg type="String" value="${main_workspace_right_selectall}" /><!--全选 -->
+		                      <property name="accelerator">
+		                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
+		                              <constructor-arg type="Character" value="A" />
+		                              <constructor-arg type="int">
+		                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
+		                              </constructor-arg>
+		                          </bean>
+		                      </property>
+		                      <property name="model">
+		                          <bean class="com.examw.test.imports.view.model.RightMenuSelectAllModel">
+		                              <constructor-arg ref="workspaceSourceArea" />
+		                          </bean>
+		                      </property>
+		                  </bean>
+		                  <bean class="javax.swing.JPopupMenu.Separator" /><!-- 分隔 -->
+		                  <bean class="javax.swing.JMenuItem">
+		                      <constructor-arg type="String" value="${main_workspace_right_copy}" /><!--复制 -->
+		                      <property name="accelerator">
+		                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
+		                              <constructor-arg type="Character" value="C" />
+		                              <constructor-arg type="int">
+		                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
+		                              </constructor-arg>
+		                          </bean>
+		                      </property>
+		                      <property name="model">
+		                          <bean class="com.examw.test.imports.view.model.RightMenuCopyModel">
+		                              <constructor-arg ref="workspaceSourceArea" />
+		                          </bean>
+		                      </property>
+		                  </bean>
+		                  <bean class="javax.swing.JMenuItem">
+		                      <constructor-arg type="String" value="${main_workspace_rignt_paste}" /><!--粘贴 -->
+		                      <property name="accelerator">
+		                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
+		                              <constructor-arg type="Character" value="V" />
+		                              <constructor-arg type="int">
+		                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
+		                              </constructor-arg>
+		                          </bean>
+		                      </property>
+		                      <property name="model">
+		                          <bean class="com.examw.test.imports.view.model.RightMenuPasteModel">
+		                              <constructor-arg ref="workspaceSourceArea" />
+		                          </bean>
+		                      </property>
+		                  </bean>
+		                  <bean class="javax.swing.JMenuItem">
+		                      <constructor-arg type="String" value="${main_workspace_right_cut}" /><!--剪切 -->
+		                      <property name="accelerator">
+		                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
+		                              <constructor-arg type="Character" value="X" />
+		                              <constructor-arg type="int">
+		                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
+		                              </constructor-arg>
+		                          </bean>
+		                      </property>
+		                     <property name="model">
+		                          <bean class="com.examw.test.imports.view.model.RightMenuCutModel">
+		                              <constructor-arg ref="workspaceSourceArea" />
+		                          </bean>
+		                      </property>
+		                  </bean>
+                  		  <bean class="javax.swing.JPopupMenu.Separator" /><!-- 分隔 -->
+                  		  <bean class="javax.swing.JMenuItem">
+		                      <constructor-arg type="String" value="${main_workspace_right_format}" /><!--格式化 -->
+		                      <property name="accelerator">
+		                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
+		                              <constructor-arg type="Character" value="F" />
+		                              <constructor-arg type="int">
+		                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
+		                              </constructor-arg>
+		                          </bean>
+		                      </property>
+		                      <property name="model">
+		                          <bean class="com.examw.test.imports.view.model.RightMenuFormatModel">
+		                              <constructor-arg ref="workspaceSourceArea" />
+		                              <property name="itemTypeOPService" ref="itemTypePanel" />
+		                              <property name="formats" ref="sourceContentFormats" />
+		                          </bean>
+		                      </property>
+		                  </bean>
+                      </list>
+                  </property>
+              </bean>
+          </property>
+      </bean>
+      <!-- Html区域 -->
+      <bean id="workspaceHtmlArea" class="javax.swing.JTextPane">
+          <property name="border">
+              <bean class="com.examw.test.imports.view.LineNumberBorder" />
+          </property>
+          <property name="contentType" value="text/html" />
+          <property name="editable" value="false" />
+      </bean>
+      <!-- 上传格式区域 -->
+      <bean id="uploadTextArea"  class="javax.swing.JTextArea">
           <property name="lineWrap" value="false" /><!-- 自动换行 -->
           <property name="border">
               <bean class="com.examw.test.imports.view.LineNumberBorder" />
           </property>
           <property name="componentPopupMenu">
-              <ref local="workspaceArea_rightMenus"/>
+              <bean class="com.examw.test.imports.view.PopupMenu">
+                  <property name="items">
+                      <list>
+		                  <bean class="javax.swing.JMenuItem">
+		                      <constructor-arg type="String" value="${main_workspace_right_upload}" /><!--上传 -->
+		                      <property name="accelerator">
+		                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
+		                              <constructor-arg type="Character" value="U" />
+		                              <constructor-arg type="int">
+		                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
+		                              </constructor-arg>
+		                          </bean>
+		                      </property>
+		                      <!-- <property name="model" ref="rightHandlerModel"/> 菜单处理模型 -->
+		                  </bean>
+	                  </list>
+                  </property>
+              </bean>
           </property>
       </bean>
-      <!-- 工作区域右键菜单 -->
-      <bean id="workspaceArea_rightMenus" class="com.examw.test.imports.view.PopupMenu">
-          <property name="items">
-              <list>
-                  <bean class="javax.swing.JMenuItem">
-                      <constructor-arg type="String" value="${main_workspace_right_selectall}" /><!--全选 -->
-                      <property name="accelerator">
-                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
-                              <constructor-arg type="Character" value="A" />
-                              <constructor-arg type="int">
-                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
-                              </constructor-arg>
-                          </bean>
-                      </property>
-                      <property name="model">
-                          <bean class="com.examw.test.imports.view.model.RightMenuSelectAllModel">
-                              <constructor-arg ref="workspaceTextArea" />
-                          </bean>
-                      </property>
-                  </bean>
-                  <bean class="javax.swing.JPopupMenu.Separator" /><!-- 分隔 -->
-                  <bean class="javax.swing.JMenuItem">
-                      <constructor-arg type="String" value="${main_workspace_right_copy}" /><!--复制 -->
-                      <property name="accelerator">
-                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
-                              <constructor-arg type="Character" value="C" />
-                              <constructor-arg type="int">
-                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
-                              </constructor-arg>
-                          </bean>
-                      </property>
-                      <property name="model">
-                          <bean class="com.examw.test.imports.view.model.RightMenuCopyModel">
-                              <constructor-arg ref="workspaceTextArea" />
-                          </bean>
-                      </property>
-                  </bean>
-                  <bean class="javax.swing.JMenuItem">
-                      <constructor-arg type="String" value="${main_workspace_rignt_paste}" /><!--粘贴 -->
-                      <property name="accelerator">
-                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
-                              <constructor-arg type="Character" value="V" />
-                              <constructor-arg type="int">
-                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
-                              </constructor-arg>
-                          </bean>
-                      </property>
-                      <property name="model">
-                          <bean class="com.examw.test.imports.view.model.RightMenuPasteModel">
-                              <constructor-arg ref="workspaceTextArea" />
-                          </bean>
-                      </property>
-                  </bean>
-                  <bean class="javax.swing.JMenuItem">
-                      <constructor-arg type="String" value="${main_workspace_right_cut}" /><!--剪切 -->
-                      <property name="accelerator">
-                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
-                              <constructor-arg type="Character" value="X" />
-                              <constructor-arg type="int">
-                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
-                              </constructor-arg>
-                          </bean>
-                      </property>
-                     <property name="model">
-                          <bean class="com.examw.test.imports.view.model.RightMenuCutModel">
-                              <constructor-arg ref="workspaceTextArea" />
-                          </bean>
-                      </property>
-                  </bean>
-                  <bean class="javax.swing.JPopupMenu.Separator" /><!-- 分隔 -->
-                  <bean class="javax.swing.JMenuItem">
-                      <constructor-arg type="String" value="${main_workspace_right_format}" /><!--格式化 -->
-                      <property name="accelerator">
-                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
-                              <constructor-arg type="Character" value="F" />
-                              <constructor-arg type="int">
-                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
-                              </constructor-arg>
-                          </bean>
-                      </property>
-                      <property name="model">
-                          <bean class="com.examw.test.imports.view.model.RightMenuFormatModel">
-                              <constructor-arg ref="workspaceTextArea" />
-                              <property name="itemTypeOPService" ref="itemTypePanel" />
-                              <property name="formats">
-                                  <map>
-                                      <entry key="${sign_choice_format_value}"><!-- 单选题格式化 -->
-                                          <bean class="com.examw.test.imports.service.impl.SingleChoiceFormat" />
-                                      </entry>
-                                      <entry key="${multy_choice_format_value}"><!-- 多选题格式化 -->
-                                          <bean class="com.examw.test.imports.service.impl.MultyChoiceFormat" />
-                                      </entry>
-                                      <entry key="${uncertain_choice_format_value}"><!-- 不定向选择格式化 -->
-                                          <bean class="com.examw.test.imports.service.impl.UncertainChoiceFormat" />
-                                      </entry>
-                                      <entry key="${judge_format_value}"><!-- 判断题格式化 -->
-                                          <bean class="com.examw.test.imports.service.impl.JudgeFormat" />
-                                      </entry>
-                                      <entry key="${qanda_format_value}"><!-- 问答题格式化 -->
-                                          <bean class="com.examw.test.imports.service.impl.QandaFormat" />
-                                      </entry>
-                                      <entry key="${share_title_format_value}"><!-- 共享提干题格式化 -->
-                                          <bean class="com.examw.test.imports.service.impl.ShareTitleFormat" />
-                                      </entry>
-                                      <entry key="${share_answer_format_value}"><!-- 共享答案题格式化 -->
-                                          <bean class="com.examw.test.imports.service.impl.ShareAnswerFormat" />
-                                      </entry>
-                                  </map>
-                              </property>
-                          </bean>
-                      </property>
-                  </bean>
-                  <bean class="javax.swing.JPopupMenu.Separator" /><!-- 分隔 -->
-                  <bean class="javax.swing.JMenuItem">
-                      <constructor-arg type="String" value="${main_workspace_right_upload}" /><!--上传 -->
-                      <property name="accelerator">
-                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
-                              <constructor-arg type="Character" value="U" />
-                              <constructor-arg type="int">
-                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
-                              </constructor-arg>
-                          </bean>
-                      </property>
-                      <!-- <property name="model" ref="rightHandlerModel"/> 菜单处理模型 -->
-                  </bean>
-              </list>
-          </property>
-      </bean>
+      <!-- 源内容格式化 -->
+      <util:map id="sourceContentFormats">
+          <entry key="${sign_choice_format_value}"><!-- 单选题格式化 -->
+              <bean class="com.examw.test.imports.service.impl.SingleChoiceFormat" />
+          </entry>
+          <entry key="${multy_choice_format_value}"><!-- 多选题格式化 -->
+              <bean class="com.examw.test.imports.service.impl.MultyChoiceFormat" />
+          </entry>
+          <entry key="${uncertain_choice_format_value}"><!-- 不定向选择格式化 -->
+              <bean class="com.examw.test.imports.service.impl.UncertainChoiceFormat" />
+          </entry>
+          <entry key="${judge_format_value}"><!-- 判断题格式化 -->
+              <bean class="com.examw.test.imports.service.impl.JudgeFormat" />
+          </entry>
+          <entry key="${qanda_format_value}"><!-- 问答题格式化 -->
+              <bean class="com.examw.test.imports.service.impl.QandaFormat" />
+          </entry>
+          <entry key="${share_title_format_value}"><!-- 共享提干题格式化 -->
+              <bean class="com.examw.test.imports.service.impl.ShareTitleFormat" />
+          </entry>
+          <entry key="${share_answer_format_value}"><!-- 共享答案题格式化 -->
+              <bean class="com.examw.test.imports.service.impl.ShareAnswerFormat" />
+          </entry>
+      </util:map>
 </beans>

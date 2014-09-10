@@ -3,7 +3,7 @@ package com.examw.test.imports.view.model;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
 import org.springframework.util.StringUtils;
 
@@ -24,8 +24,8 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 	 * 构造函数。
 	 * @param textArea
 	 */
-	public RightMenuFormatModel(JTextArea textArea) {
-		super(textArea);
+	public RightMenuFormatModel(JTextComponent textComponent) {
+		super(textComponent);
 	}
 	/**
 	 * 设置题型操作服务接口。
@@ -50,23 +50,23 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 	@Override
 	protected void handler() {
 		if(this.itemTypeOPService == null){
-			JOptionPane.showMessageDialog(this.textArea, "未配置题型操作！", "错误", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this.textComponent, "未配置题型操作！", "错误", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		String itemTypeValue = this.itemTypeOPService.getSelected();
 		if(StringUtils.isEmpty(itemTypeValue)){
-			JOptionPane.showMessageDialog(this.textArea, "请选择题型！", "警告", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this.textComponent, "请选择题型！", "警告", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		ItemTypeFormat format = this.formats.get(itemTypeValue);
 		if(format == null){
-			JOptionPane.showMessageDialog(this.textArea, String.format("未配置题型[type=%s]处理！", itemTypeValue), "警告", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this.textComponent, String.format("未配置题型[type=%s]处理！", itemTypeValue), "警告", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		try {
-			format.format(this.textArea);
+			format.format(this.textComponent.getDocument());
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(this.textArea, String.format("处理题型［type=%1$s］异常：%2$s", itemTypeValue, e.getMessage()), "警告", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this.textComponent, String.format("处理题型［type=%1$s］异常：%2$s", itemTypeValue, e.getMessage()), "警告", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();
 		}
 	}

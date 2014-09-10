@@ -1,6 +1,6 @@
 package com.examw.test.imports.view.model;
 
-import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
 /**
  * 右键全选菜单按钮处理模型。
@@ -12,10 +12,10 @@ public class RightMenuSelectAllModel extends RightMenuBaseModel {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 构造函数。
-	 * @param textArea
+	 * @param textComponent
 	 */
-	public RightMenuSelectAllModel(JTextArea textArea) {
-		super(textArea);
+	public RightMenuSelectAllModel(JTextComponent textComponent) {
+		super(textComponent);
 	}
 	/*
 	 * (non-Javadoc)
@@ -23,6 +23,6 @@ public class RightMenuSelectAllModel extends RightMenuBaseModel {
 	 */
 	@Override
 	protected void handler() {
-		this.textArea.selectAll();
+		this.textComponent.selectAll();
 	}
 }

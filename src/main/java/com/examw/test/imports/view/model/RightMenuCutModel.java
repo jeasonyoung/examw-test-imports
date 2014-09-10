@@ -1,6 +1,6 @@
 package com.examw.test.imports.view.model;
 
-import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
 /**
  * 剪切。
@@ -12,10 +12,10 @@ public class RightMenuCutModel extends RightMenuBaseModel {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 构造函数。
-	 * @param textArea
+	 * @param textComponent
 	 */
-	public RightMenuCutModel(JTextArea textArea) {
-		super(textArea);
+	public RightMenuCutModel(JTextComponent textComponent) {
+		super(textComponent);
 	}
 	/*
 	 * (non-Javadoc)
@@ -23,9 +23,9 @@ public class RightMenuCutModel extends RightMenuBaseModel {
 	 */
 	@Override
 	protected void handler() {
-		if(this.textArea.getSelectedText() == null){
-			this.textArea.selectAll();
+		if(this.textComponent.getSelectedText() == null){
+			this.textComponent.selectAll();
 		}
-		this.textArea.cut();
+		this.textComponent.cut();
 	}
 }

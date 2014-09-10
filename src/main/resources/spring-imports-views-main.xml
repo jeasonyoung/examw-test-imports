@@ -25,7 +25,7 @@
 	            <entry key="Center">
 	                 <ref bean="mainWorkspace"/>
 	            </entry>
-	            <entry key="South">
+	           <!--  <entry key="South">
 	                <bean class="javax.swing.JLabel">
 	                    <constructor-arg index="0" value="当前状态：xxx-   " />
 	                    <constructor-arg index="1">
@@ -38,7 +38,7 @@
 	                         </bean>
 	                    </property>
 	                </bean>
-	            </entry>
+	            </entry> -->
 	        </map>
 	    </property>
 	    <!-- 用户鉴权 -->

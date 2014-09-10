@@ -1,6 +1,6 @@
 package com.examw.test.imports.view.model;
 
-import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
 /**
  * 粘贴。
@@ -12,10 +12,10 @@ public class RightMenuPasteModel extends RightMenuBaseModel {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 构造函数。
-	 * @param textArea
+	 * @param textComponent
 	 */
-	public RightMenuPasteModel(JTextArea textArea) {
-		super(textArea);
+	public RightMenuPasteModel(JTextComponent textComponent) {
+		super(textComponent);
 	}
 	/*
 	 * (non-Javadoc)
@@ -23,6 +23,6 @@ public class RightMenuPasteModel extends RightMenuBaseModel {
 	 */
 	@Override
 	protected void handler() {
-		 this.textArea.paste();
+		 this.textComponent.paste();
 	}
 }

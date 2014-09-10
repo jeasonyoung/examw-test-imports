@@ -3,7 +3,7 @@ package com.examw.test.imports.view.model;
 import java.awt.event.ActionEvent;
 
 import javax.swing.DefaultButtonModel;
-import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
 /**
  * 右键菜单基础抽象类。
@@ -13,14 +13,14 @@ import javax.swing.JTextArea;
  */
 public abstract class RightMenuBaseModel extends DefaultButtonModel {
 	private static final long serialVersionUID = 1L;
-	protected JTextArea textArea;
+	protected JTextComponent textComponent;
 	/**
 	 *  构造函数。
-	 * @param textArea
+	 * @param textComponent
 	 */
-	public RightMenuBaseModel(JTextArea textArea){
+	public RightMenuBaseModel(JTextComponent textComponent){
 		super();
-		this.textArea = textArea;
+		this.textComponent = textComponent;
 	}
 	/**
 	 * 事件处理。

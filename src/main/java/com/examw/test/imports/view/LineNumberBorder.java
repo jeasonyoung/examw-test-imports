@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JTextArea;
 import javax.swing.border.AbstractBorder;
+import javax.swing.text.JTextComponent;
 
 /**
  * 添加行号边框。
@@ -24,7 +25,7 @@ public class LineNumberBorder extends AbstractBorder {
 	 */
 	@Override
 	public Insets getBorderInsets(Component c) {
-		return getBorderInsets(c, new Insets(0, 0, 0, 0));
+		return this.getBorderInsets(c, new Insets(0, 0, 0, 0));
 	}
 	/*
 	 * insets对象是容器边界的表示形式，它指定容器必须在其各个边缘留出的空间。
@@ -32,8 +33,8 @@ public class LineNumberBorder extends AbstractBorder {
 	 */
 	@Override
 	public Insets getBorderInsets(Component c, Insets insets) {
-		if(c instanceof JTextArea){
-			int width = this.lineNumberWidth((JTextArea)c);
+		if(c instanceof JTextComponent){
+			int width = this.lineNumberWidth((JTextComponent)c);
 			insets.left = width;
 		}
 		return insets;
@@ -52,6 +53,10 @@ public class LineNumberBorder extends AbstractBorder {
 	 */
 	@Override
 	public void paintBorder(Component c, Graphics g, int x, int y, int width,int height) {
+		if(!(c instanceof JTextComponent)){
+			super.paintBorder(c, g, x, y, width, height);
+			return;
+		}
 		 Rectangle clip = g.getClipBounds();//获得当前剪贴区域的边界矩形。
 		 FontMetrics fm = g.getFontMetrics();
 		 int fontHeight = fm.getHeight();
@@ -67,15 +72,15 @@ public class LineNumberBorder extends AbstractBorder {
 		 if(yend > (y + height)){
 			 yend = y + height;
 		 }
-		 JTextArea textArea = (JTextArea)c;
-		 int lineWidth = this.lineNumberWidth(textArea),
+		 JTextComponent textComponent = (JTextComponent)c;
+		 int lineWidth = this.lineNumberWidth(textComponent),
 			  lnxStart = x + lineWidth;
 		 g.setColor(new Color(0xCC, 0xCC, 0xCC));
 		 g.drawLine(lnxStart, y, lnxStart, y + height);
 		 
 		 //g.setColor(Color.blue);
 		 //loop nutil out of the "visible" region...
-		 int length = (" " + Math.max(textArea.getRows(), textArea.getLineCount() + 1)).length();
+		 int length = lineWidth;//(" " + Math.max(textArea.getRows(), textArea.getLineCount() + 1)).length();
 		 //绘制行号
 		 while(ybaseline < yend){
 			 String label = padLabel(startingLineNumber, length, true);
@@ -85,10 +90,17 @@ public class LineNumberBorder extends AbstractBorder {
 		 }
 	}
 	//适合的数字宽度。
-	private int lineNumberWidth(JTextArea textArea){
-		int lineCount = Math.max(textArea.getRows(), textArea.getLineCount());
+	private int lineNumberWidth(JTextComponent textComponent){
+		int lineCount = 0;
+		FontMetrics fm = textComponent.getFontMetrics(textComponent.getFont());
+		if(textComponent instanceof JTextArea){
+			lineCount = Math.max(((JTextArea)textComponent).getRows(), ((JTextArea)textComponent).getLineCount() + 1);
+		}else {
+			int height = fm.getHeight();
+			lineCount = (textComponent.getHeight() / height) + 1;
+		}
 		if(lineCount < 10) lineCount = 10;
-		return textArea.getFontMetrics(textArea.getFont()).stringWidth(lineCount + " ");
+		return fm.stringWidth(lineCount + " ");
 	}
 	//
 	private static String padLabel(int lineNumber,int length,boolean addSpace){

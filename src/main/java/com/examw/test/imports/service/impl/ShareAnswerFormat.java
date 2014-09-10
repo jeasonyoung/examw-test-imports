@@ -1,6 +1,5 @@
 package com.examw.test.imports.service.impl;
-
-import javax.swing.JTextArea;
+import javax.swing.text.Document;
 
 import com.examw.test.imports.service.ItemTypeFormat;
 
@@ -13,7 +12,7 @@ import com.examw.test.imports.service.ItemTypeFormat;
 public class ShareAnswerFormat implements ItemTypeFormat {
 
 	@Override
-	public void format(JTextArea textArea) {
+	public void format(Document document) {
 		// TODO Auto-generated method stub
 		
 	}

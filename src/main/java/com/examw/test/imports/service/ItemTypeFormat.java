@@ -1,6 +1,6 @@
 package com.examw.test.imports.service;
 
-import javax.swing.JTextArea;
+import javax.swing.text.Document;
 
 /**
  * 题型格式化。
@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
 public interface ItemTypeFormat {
 	/**
 	 * 格式化处理。
-	 * @param textArea
+	 * @param document
 	 */
-	void format(JTextArea textArea);
+	void format(Document document);
 }
