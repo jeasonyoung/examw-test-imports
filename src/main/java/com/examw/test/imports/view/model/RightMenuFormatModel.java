@@ -20,6 +20,7 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 	private static final long serialVersionUID = 1L;
 	private ItemTypeOPService itemTypeOPService;
 	private Map<String, ItemTypeFormat> formats;
+	private JTextComponent uploadFormatComponent;
 	/**
 	 * 构造函数。
 	 * @param textArea
@@ -43,6 +44,14 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 	public void setFormats(Map<String, ItemTypeFormat> formats) {
 		this.formats = formats;
 	}
+	/**
+	 * 设置上传格式组件。
+	 * @param uploadFormatComponent 
+	 *	  上传格式组件。
+	 */
+	public void setUploadFormatComponent(JTextComponent uploadFormatComponent) {
+		this.uploadFormatComponent = uploadFormatComponent;
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see com.examw.test.imports.view.model.RightMenuBaseModel#handler()
@@ -65,6 +74,9 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 		}
 		try {
 			format.format(this.textComponent);
+			if(this.uploadFormatComponent != null){
+				this.uploadFormatComponent.setText(format.uploadFormatJson(this.textComponent.getText(),  itemTypeValue));
+			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this.textComponent, String.format("处理题型［type=%1$s］异常：%2$s", itemTypeValue, e.getMessage()), "警告", JOptionPane.WARNING_MESSAGE);
 			e.printStackTrace();

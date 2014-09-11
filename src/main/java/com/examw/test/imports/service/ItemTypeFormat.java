@@ -13,5 +13,12 @@ public interface ItemTypeFormat {
 	 * 格式化处理。
 	 * @param textComponent
 	 */
-	void format(JTextComponent textComponent);
+	void format(JTextComponent textComponent) throws Exception;
+	/**
+	 * 格式化为上传的json格式。
+	 * @param format
+	 * @param type
+	 * @return
+	 */
+	String uploadFormatJson(String format, String type) throws Exception;
 }

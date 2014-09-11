@@ -279,6 +279,7 @@
 		                              <constructor-arg ref="workspaceSourceArea" />
 		                              <property name="itemTypeOPService" ref="itemTypePanel" />
 		                              <property name="formats" ref="sourceContentFormats" />
+		                              <property name="uploadFormatComponent" ref="uploadTextArea" />
 		                          </bean>
 		                      </property>
 		                  </bean>
@@ -297,7 +298,7 @@
       </bean>
       <!-- 上传格式区域 -->
       <bean id="uploadTextArea"  class="javax.swing.JTextArea">
-          <property name="lineWrap" value="false" /><!-- 自动换行 -->
+          <property name="lineWrap" value="true" /><!-- 自动换行 -->
           <property name="border">
               <bean class="com.examw.test.imports.view.LineNumberBorder" />
           </property>

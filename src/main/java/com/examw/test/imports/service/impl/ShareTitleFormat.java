@@ -1,8 +1,6 @@
 package com.examw.test.imports.service.impl;
 
-import javax.swing.text.JTextComponent;
-
-import com.examw.test.imports.service.ItemTypeFormat;
+import com.examw.test.imports.model.ClientUploadItem;
 
 /**
  * 共享提干格式化。
@@ -10,12 +8,19 @@ import com.examw.test.imports.service.ItemTypeFormat;
  * @author yangyong
  * @since 2014年9月4日
  */
-public class ShareTitleFormat implements ItemTypeFormat {
+public class ShareTitleFormat extends BaseItemTypeFormat {
 
 	@Override
-	public void format(JTextComponent textComponent) {
+	protected String itemFormatHandler(String item) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+ 
 
+	@Override
+	protected ClientUploadItem convertHander(String item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+ 
 }
