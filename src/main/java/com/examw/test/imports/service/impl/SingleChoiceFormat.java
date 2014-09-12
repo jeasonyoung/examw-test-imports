@@ -1,9 +1,10 @@
 package com.examw.test.imports.service.impl;
  
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.Map; 
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.springframework.util.StringUtils;
 
@@ -68,7 +69,7 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 	protected ClientUploadItem convertHander(String content) {
 		String [] lines = content.split(System.lineSeparator());
 		if(lines != null && lines.length > 0){
-			Map<String, String> map =  new HashMap<>();
+			Map<String, String> map = new TreeMap<String,String>(new Comparator<String>(){ @Override public int compare(String o1, String o2) { return o1.compareTo(o2); } });
 			StringBuilder builder = new StringBuilder();
 			String current_order = null, order = null;
 			for(String line : lines){
@@ -109,7 +110,7 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 	protected ClientUploadItem convertHander(Map<String, String> map){
 		if(map == null || map.size() == 0) return null;
 		ClientUploadItem clientUploadItem = new ClientUploadItem();
-		Set<ItemScoreInfo> children = new HashSet<>();
+		Set<ItemScoreInfo> children = new TreeSet<ItemScoreInfo>(new Comparator<ItemScoreInfo>(){ @Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
 		Integer children_orderNo = 1;
 		for(Map.Entry<String, String> entry : map.entrySet()){
 			String order = entry.getKey(), content = entry.getValue();
@@ -126,7 +127,26 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 			}
 		}
 		if(children.size() > 0) clientUploadItem.getItem().setChildren(children);
-		return clientUploadItem;
+		return this.convertHander(clientUploadItem);
+	}
+	/**
+	 * 转换整理。
+	 * @param source
+	 * @return
+	 */
+	protected ClientUploadItem convertHander(ClientUploadItem source){
+		if(source != null && source.getItem() != null){
+			 ItemScoreInfo item = source.getItem();
+			 if(!StringUtils.isEmpty(item.getAnswer()) && item.getChildren() != null){
+				 for(ItemScoreInfo opt : item.getChildren()){
+					if(opt.getContent().indexOf(item.getAnswer()) > -1){
+						item.setAnswer(opt.getId());
+					}
+					//opt.setContent(opt.getContent().replaceFirst(regex_opts_exists, "").trim());
+				 }
+			 }
+		}
+		return source;
 	}
 	/*
 	 * (non-Javadoc)

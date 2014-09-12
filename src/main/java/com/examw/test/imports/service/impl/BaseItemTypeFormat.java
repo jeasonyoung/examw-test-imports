@@ -24,6 +24,12 @@ import com.examw.test.imports.service.ItemTypeFormat;
  * @since 2014年9月11日
  */
 public abstract class BaseItemTypeFormat implements ItemTypeFormat {
+	private static final String regex_item_find_order = "^(\\d+)\\.";//查找题序。
+	private static final String insert_html_newline ="<br/><br/>";//插入html空行符。
+	private static final String regex_row_right_newline = "^(<br/>)+$";//去掉右边的html换行。
+	private static final String regex_item_html_newline_split = "(<br/><br/>)";//html空行符。
+	private static final String regex_row_left_trim = "^[　*| *| *|//s*]*";//去掉左边空格（包括全角/半角空格 Tab 制表符等）。
+	private static final String regex_row_right_trim = "[　*| *| *|//s*]*$";//去掉右边空格（包括全角/半角空格 Tab 制表符等）。
 	/*
 	 * 格式化处理入口。
 	 * @see com.examw.test.imports.service.ItemTypeFormat#format(javax.swing.text.JTextComponent)
@@ -38,7 +44,7 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 			 for(String row : rows){
 				 row = this.trimSymbol(row);
 				 if(StringUtils.isEmpty(row)) continue;
-				 String orderValue =  this.find("^(\\d+)\\.", row, 1);
+				 String orderValue =  this.find(regex_item_find_order, row, 1);
 				 order = StringUtils.isEmpty(orderValue) ? null : new Integer(orderValue);
 				 if(order ==  null){
 					 if(singleBuilder.length() > 0) singleBuilder.append(System.lineSeparator());
@@ -68,7 +74,7 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 			 for(String content : map.values()){
 				 if(StringUtils.isEmpty(content)) continue;
 				 builder.append(this.itemFormatHandler(content));
-				 builder.append(System.lineSeparator()).append("<br/><br/>").append(System.lineSeparator());
+				 builder.append(System.lineSeparator()).append(insert_html_newline).append(System.lineSeparator());
 			 }
 			 textComponent.setText(builder.toString());
 		 }
@@ -86,7 +92,7 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 	public String uploadFormatJson(String format,String type) throws Exception {
 		if(StringUtils.isEmpty(format)) return format;
 		 List<ClientUploadItem> list = new ArrayList<ClientUploadItem>();
-		 String[] rows = format.split("(<br/><br/>)");
+		 String[] rows = format.split(regex_item_html_newline_split);
 		 if(rows != null && rows.length > 0){
 			for(String row : rows){
 				row = this.trimSymbol(row);
@@ -132,8 +138,8 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 	protected String trimSymbol(String source){
 		String result = "";
 		if(!StringUtils.isEmpty(source)){
-			result = source.replaceAll("^[　*| *| *|//s*]*", "").replaceAll("[　*| *| *|//s*]*$", "");
-			result = result.replaceAll("^(<br/>)+$", "");
+			result = source.replaceAll(regex_row_left_trim, "").replaceAll(regex_row_right_trim, "");
+			result = result.replaceAll(regex_row_right_newline, "");
 			String find = this.find("^(\\d+。)", result, 1);
 			if(!StringUtils.isEmpty(find)){
 				result = result.replace(find, find.substring(0, find.length() - 1) + ".");
