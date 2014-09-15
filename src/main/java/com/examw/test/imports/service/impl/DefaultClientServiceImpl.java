@@ -16,11 +16,13 @@ import org.springframework.util.StringUtils;
 import com.examw.test.imports.model.ClientExamInfo;
 import com.examw.test.imports.model.ClientPaperInfo;
 import com.examw.test.imports.model.ClientStructureInfo;
+import com.examw.test.imports.model.ClientUploadItem;
 import com.examw.test.imports.model.Json;
 import com.examw.test.imports.model.KeyValue;
 import com.examw.test.imports.model.KeyValueType;
 import com.examw.test.imports.service.ExamRemoteDataService;
 import com.examw.test.imports.service.ItemTypeRemoteDataService;
+import com.examw.test.imports.service.ItemUploadRemoteService;
 import com.examw.test.imports.service.PaperRemoteDataService;
 import com.examw.test.imports.service.PaperStructureRemoteDataService;
 import com.examw.test.imports.shiro.service.UserAuthentication;
@@ -32,7 +34,7 @@ import com.examw.test.imports.support.MD5Util;
  * @author yangyong
  * @since 2014年9月3日
  */
-public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemoteDataService,ExamRemoteDataService,PaperRemoteDataService,PaperStructureRemoteDataService {
+public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemoteDataService,ExamRemoteDataService,PaperRemoteDataService,PaperStructureRemoteDataService,ItemUploadRemoteService {
 	private static final Logger logger = Logger.getLogger(DefaultClientServiceImpl.class);
 	ObjectMapper mapper;
 	private String serverUrl;
@@ -161,5 +163,14 @@ public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemo
 			}
 		}
 		return list;
+	}
+	/*
+	 * 上传试题数据。
+	 * @see com.examw.test.imports.service.ItemUploadRemoteService#upload(java.lang.String, com.examw.test.imports.model.ClientUploadItem)
+	 */
+	@Override
+	public boolean upload(String paperId, ClientUploadItem data) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

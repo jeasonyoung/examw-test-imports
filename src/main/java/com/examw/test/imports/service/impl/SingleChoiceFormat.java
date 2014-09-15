@@ -1,5 +1,6 @@
 package com.examw.test.imports.service.impl;
  
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map; 
 import java.util.Set;
@@ -10,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import com.examw.test.imports.model.ClientUploadItem;
 import com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo;
+import com.examw.test.imports.service.ItemHtmlPreview;
 
 /**
  * 单选题格式化。
@@ -17,7 +19,7 @@ import com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo;
  * @author yangyong
  * @since 2014年9月4日
  */
-public class SingleChoiceFormat extends BaseItemTypeFormat {
+public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPreview {
 	private static final String regex_opts_exists = "^([A-Z]\\.)";//判断选项存在。
 	private static final String regex_opts_split = "[A-Z]\\.";//按选项进行分组。
 	private static final String regex_answers_exists = "\\[答案\\]";//判断答案存在。
@@ -116,6 +118,7 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 			String order = entry.getKey(), content = entry.getValue();
 			if(order.matches("^\\d+")){//内容
 				clientUploadItem.setOrderNo(new Integer(order));
+				clientUploadItem.getItem().setSerial(order);
 				clientUploadItem.getItem().setOrderNo(0);
 				clientUploadItem.getItem().setContent(content.replaceFirst(regex_item_order_replace, "").trim());
 			}else if(order.matches(regex_answers_exists)){//答案
@@ -176,5 +179,51 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 			}
 		}
 		return null;
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.examw.test.imports.service.ItemHtmlPreview#htmlPreview(com.examw.test.imports.model.ClientUploadItem)
+	 */
+	@Override
+	public String htmlPreview(ClientUploadItem source) {
+		StringBuilder html = new StringBuilder();
+		ItemScoreInfo item = null;
+		if(source != null && (item = source.getItem()) != null){
+			html.append(System.lineSeparator()).append("<br/>");
+			if(!StringUtils.isEmpty(item.getSerial())) html.append("<span>").append(item.getSerial()).append(".").append("</span>");
+			html.append(item.getContent()).append("<br/>").append(System.lineSeparator());
+			if(item.getChildren() != null && item.getChildren().size() > 0){
+				ItemScoreInfo[] opts = item.getChildren().toArray(new ItemScoreInfo[0]);
+				Arrays.sort(opts, new Comparator<ItemScoreInfo>() {@Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
+				for(ItemScoreInfo opt : opts){
+					html.append(this.renderOptionsHtml(item.getId(), opt, item.getAnswer())).append("<br/>").append(System.lineSeparator());
+				}
+			}
+			if(!StringUtils.isEmpty(item.getAnalysis())){
+				html.append(System.lineSeparator()).append("<br/>").append(System.lineSeparator());
+				html.append("[答案解析]");
+				html.append(System.lineSeparator()).append("<br/>").append(System.lineSeparator());
+				html.append(item.getAnalysis());
+			}
+		}
+		return html.toString();
+	}
+	/**
+	 * 绘制选项。
+	 * @param opt
+	 * @param answers
+	 * @return
+	 */
+	protected String renderOptionsHtml(String itemId, ItemScoreInfo opt, String answers){
+		if(opt == null) return null;
+		StringBuilder optBuilder = new StringBuilder("<label>");
+		optBuilder.append("<input type='radio' name='").append(itemId).append("' ");
+		if(!StringUtils.isEmpty(answers) && answers.indexOf(opt.getId()) > -1){
+			optBuilder.append(" checked='checked' ");
+		}
+		optBuilder.append(" />");
+		optBuilder.append(opt.getContent());
+		optBuilder.append("</label>");
+		return optBuilder.toString();
 	}
 }

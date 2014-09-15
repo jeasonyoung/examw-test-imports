@@ -1,12 +1,10 @@
 package com.examw.test.imports.view;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.util.Map;
 
-import javax.swing.JDialog;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
@@ -16,7 +14,7 @@ import org.apache.log4j.Logger;
  * @author yangyong
  * @since 2014年8月27日
  */
-public class UserLoginDialog extends JDialog {
+public class UserLoginDialog extends ContentDialog {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(UserLoginDialog.class);
 	private String closeDialogTitle,closeDialogMessage;
@@ -31,11 +29,8 @@ public class UserLoginDialog extends JDialog {
 	 * @param heigt
 	 * 窗体高度。
 	 */
-	public UserLoginDialog(Frame owner, String title,int width,int height){
-		super(owner, title, true);
-		if(logger.isDebugEnabled()) logger.debug("构造登录UI..");
-		this.setSize(new Dimension(width, height));
-		if(logger.isDebugEnabled()) logger.debug(String.format("设置登录界面［w=%1$s,h=%2$s］", width, height));
+	public UserLoginDialog(JFrame owner, String title,int width,int height){
+		 super(owner, title, width, height);
 	}
 	/**
 	 * 设置关闭对话框时显示的标题。
@@ -58,13 +53,10 @@ public class UserLoginDialog extends JDialog {
 	 * @param members 
 	 *	  成员控件集合。
 	 */
-	public void setMembers(Map<String, Component> members) {
+	@Override
+	public void setMembers(Map<String, JComponent> members) {
+		super.setMembers(members);
 		if(members != null && members.size() > 0){
-			if(logger.isDebugEnabled()) logger.debug("加载成员组件...");
-			for(Map.Entry<String, Component> entry : members.entrySet()){
-				if(logger.isDebugEnabled()) logger.debug(String.format("开始加载[%s]...", entry.getKey()));
-				this.add(entry.getValue(),entry.getKey());
-			}
 			this.pack();
 		}
 	}

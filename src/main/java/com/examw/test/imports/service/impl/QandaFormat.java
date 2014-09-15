@@ -1,6 +1,7 @@
 package com.examw.test.imports.service.impl;
 
 import com.examw.test.imports.model.ClientUploadItem;
+import com.examw.test.imports.service.ItemHtmlPreview;
 
 /**
  * 问答题格式化。
@@ -8,7 +9,7 @@ import com.examw.test.imports.model.ClientUploadItem;
  * @author yangyong
  * @since 2014年9月4日
  */
-public class QandaFormat extends BaseItemTypeFormat {
+public class QandaFormat extends BaseItemTypeFormat implements ItemHtmlPreview {
 
 	@Override
 	protected String itemFormatHandler(String item) {
@@ -18,6 +19,12 @@ public class QandaFormat extends BaseItemTypeFormat {
  
 	@Override
 	protected ClientUploadItem convertHander(String item) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String htmlPreview(ClientUploadItem source) {
 		// TODO Auto-generated method stub
 		return null;
 	}

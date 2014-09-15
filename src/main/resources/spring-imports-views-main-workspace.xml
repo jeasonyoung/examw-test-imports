@@ -316,7 +316,17 @@
 		                              </constructor-arg>
 		                          </bean>
 		                      </property>
-		                      <!-- <property name="model" ref="rightHandlerModel"/> 菜单处理模型 -->
+		                      <property name="model">
+		                          <bean class="com.examw.test.imports.view.model.RightMenuUploadModel">
+		                              <constructor-arg ref="uploadTextArea" />
+		                              <property name="paperOPService" ref="paperComboBoxModel" />
+		                              <property name="paperStructureOPService" ref="paperStructureComboBoxModel" />
+		                              <property name="warningTitle" value="${right_menu_upload_warning_title}" />
+		                              <property name="noSelectPaperMessager" value="${right_menu_upload_noselect_paper_messager}" />
+		                              <property name="noSelectPaperStructureMessager" value="${right_menu_upload_noselect_paper_structure_messager}" />
+		                              <property name="preview" ref="uploadPreviewDialog" />
+		                          </bean>
+		                      </property>
 		                  </bean>
 	                  </list>
                   </property>
@@ -347,4 +357,109 @@
               <bean class="com.examw.test.imports.service.impl.ShareAnswerFormat" />
           </entry>
       </util:map>
+      <!-- 上传预览文本模型 -->
+     <bean id="uploadPreviewDocument" class="com.examw.test.imports.view.model.UploadPreviewDocument">
+         <property name="itemHtmlPreviews" ref="sourceContentFormats" />
+         <property name="broadcastUpdate" ref="uploadPreview_tabbedContentPanel" />
+     </bean>
+      <!-- 上传阅览界面 -->
+      <bean id="uploadPreviewDialog" class="com.examw.test.imports.view.UploadContentDialog">
+           <constructor-arg index="0" ref="mainFrameView" /><!-- 依附的主窗体 -->
+            <constructor-arg index="1" value="试题上传"/><!-- 标题 -->
+	    	<constructor-arg index="2" value="600" /><!-- 宽度 -->
+	    	<constructor-arg index="3" value="400" /><!-- 高度 -->
+		    <property name="layout"><!-- 布局管理 -->
+		        <bean class="java.awt.BorderLayout" />
+		    </property>
+		    <property name="uploadItemPreview" ref="uploadPreviewDocument" />
+	    	<property name="members"><!-- 成员控件 -->
+	    	    <map>
+	    	        <entry key="Center"><!-- 预览区域 -->
+	    	            <ref local="uploadPreview_tabbedContentPanel" />
+	    	        </entry>
+	    	        <entry key="South"><!-- 按钮区域 -->
+	    	            <bean class="com.examw.test.imports.view.ContentPanel">
+	    	                <constructor-arg>
+		                        <bean class="java.awt.FlowLayout" />
+		                    </constructor-arg>
+		                    <property name="memberList">
+		                        <list>
+			                        <bean class="javax.swing.JButton">
+			                            <constructor-arg type="String" value="上一题" />
+			                            <property name="model">
+			                                <bean class="com.examw.test.imports.view.model.UploadItemPreviewModel">
+			                                    <constructor-arg index="0" ref="uploadPreviewDialog" />
+			                                    <constructor-arg index="1" ref="uploadPreviewDocument" />
+			                                </bean>
+			                            </property>
+			                        </bean>
+			                         <bean class="javax.swing.JButton">
+			                            <constructor-arg type="String" value="上传题目" />
+			                            <property name="model">
+			                                <bean class="com.examw.test.imports.view.model.UploadItemModel">
+			                                    <constructor-arg index="0" ref="uploadPreviewDialog" />
+			                                    <constructor-arg index="1" ref="uploadPreviewDocument" />
+			                                    <constructor-arg index="2" ref="clientService" />
+			                                </bean>
+			                            </property>
+			                        </bean>
+			                         <bean class="javax.swing.JButton">
+			                            <constructor-arg type="String" value="下一题" />
+			                            <property name="model">
+			                                <bean class="com.examw.test.imports.view.model.UploadItemPreviewModel">
+			                                    <constructor-arg index="0" ref="uploadPreviewDialog" />
+			                                    <constructor-arg index="1" ref="uploadPreviewDocument" />
+			                                    <constructor-arg index="2" value="true" />
+			                                </bean>
+			                            </property>
+			                        </bean>
+		                        </list>
+		                    </property>
+	    	            </bean>
+	    	        </entry>
+	    	    </map>
+	    	</property>
+      </bean>
+      <!-- uploadPreview -->
+      <bean id="uploadPreview_tabbedContentPanel" class="com.examw.test.imports.view.TabbedContentPanel">
+             <property name="document" ref="uploadPreviewDocument" />
+             <property name="contentBroadcast" ref="uploadPreviewDocument" />
+             <property name="textComponents">
+                 <list>
+                     <ref local="uploadPreviewHtmlArea"/>
+                 </list>
+             </property>
+             <property name="tabs">
+                <map>
+                    <entry key="HTML">
+                        <bean class="javax.swing.JScrollPane">
+                            <constructor-arg>
+                                <ref local="uploadPreviewHtmlArea"/>
+                            </constructor-arg>
+                        </bean>
+                    </entry>
+                    <entry key="源代码">
+                        <bean class="javax.swing.JScrollPane">
+					        <constructor-arg>
+					            <bean class="javax.swing.JTextArea"><!-- 上传预览源代码 -->
+							          <property name="lineWrap" value="true" /><!-- 自动换行 -->
+							          <property name="border">
+							              <bean class="com.examw.test.imports.view.LineNumberBorder" />
+							          </property>
+							          <property name="document" ref="uploadPreviewDocument" />
+								</bean>
+					        </constructor-arg>
+					     </bean>
+                    </entry>
+                </map>
+            </property>
+      </bean>
+      <!-- 上传预览Html -->
+      <bean id="uploadPreviewHtmlArea" class="javax.swing.JTextPane">
+          <property name="border">
+              <bean class="com.examw.test.imports.view.LineNumberBorder" />
+          </property>
+          <property name="contentType" value="text/html" />
+          <property name="editable" value="false" />
+      </bean>
 </beans>

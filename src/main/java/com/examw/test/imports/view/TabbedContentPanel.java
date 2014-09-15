@@ -13,15 +13,19 @@ import javax.swing.text.JTextComponent;
 
 import org.springframework.util.StringUtils;
 
+import com.examw.test.imports.service.TabbedContentBroadcast;
+import com.examw.test.imports.service.TabbedContentBroadcastUpdate;
+
 /**
  * html 编辑器
  * 
  * @author yangyong
  * @since 2014年9月9日
  */
-public class TabbedContentPanel extends JTabbedPane implements ChangeListener {
+public class TabbedContentPanel extends JTabbedPane implements ChangeListener,TabbedContentBroadcastUpdate {
 	private static final long serialVersionUID = 1L;
 	private Document document;
+	private TabbedContentBroadcast contentBroadcast;
 	private List<JTextComponent> textComponents;
 	/**
 	 * 构造函数。
@@ -65,23 +69,49 @@ public class TabbedContentPanel extends JTabbedPane implements ChangeListener {
 	public void setTextComponents(List<JTextComponent> textComponents) {
 		this.textComponents = textComponents;
 	}
+	/**
+	 * 设置内容广播转换。
+	 * @param contentBroadcast 
+	 *	  内容广播转换。
+	 */
+	public void setContentBroadcast(TabbedContentBroadcast contentBroadcast) {
+		this.contentBroadcast = contentBroadcast;
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		TabbedContentPanel panel = (TabbedContentPanel)e.getSource();
 		if(panel != null){
 			 int index =	panel.getSelectedIndex();
-			 if(index > -1 && this.document != null && this.textComponents != null && this.textComponents.size() > 0){
-				 try {
+			 if(index > -1){
+				this.updateBroadcast();
+			 }
+		}
+	}
+	/**
+	 * 更新广播。
+	 */
+	@Override
+	public void updateBroadcast() {
+		if(this.document != null && this.textComponents != null && this.textComponents.size() > 0){
+			 try {
 					String text = this.document.getText(0, this.document.getLength());
 					if(!StringUtils.isEmpty(text)){
-						for(JTextComponent textComponent : this.textComponents){
+						JTextComponent textComponent = null;
+						for(int i = 0; i < this.textComponents.size(); i++){
+							if((textComponent = this.textComponents.get(i)) == null) continue;
+							if(this.contentBroadcast != null){
+								text = this.contentBroadcast.contentBroadcat(i, text);
+							}
 							textComponent.setText(text);
 						}
 					}
 				} catch (BadLocationException e1) {
 					e1.printStackTrace();
 				}
-			 }
 		}
 	}
 }
