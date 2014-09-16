@@ -20,6 +20,7 @@ import com.examw.test.imports.service.ItemHtmlPreview;
  * @since 2014年9月4日
  */
 public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPreview {
+	private static final String regex_line_separator = "\n";
 	private static final String regex_opts_exists = "^([A-Z]\\.)";//判断选项存在。
 	private static final String regex_opts_split = "[A-Z]\\.";//按选项进行分组。
 	private static final String regex_answers_exists = "\\[答案\\]";//判断答案存在。
@@ -37,7 +38,7 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 	protected String itemFormatHandler(String item) {
 		if(StringUtils.isEmpty(item)) return item;
 		StringBuilder builder = new StringBuilder();
-		String[] rows = item.split(System.lineSeparator());
+		String[] rows = item.split(regex_line_separator);
 		if(rows != null && rows.length > 0){
 			for(String row : rows){
 				row = this.trimSymbol(row);
@@ -48,14 +49,14 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 						opt = this.trimSymbol(opt);
 						if(StringUtils.isEmpty(opt)) continue;
 						opt = this.findOptHead(opt, row) + opt;
-						builder.append(insert_html_newline).append(System.lineSeparator()).append(opt);
+						builder.append(insert_html_newline).append(regex_line_separator).append(opt);
 					}
 				}else if (this.isExists(regex_answers_exists, row)) {//答案
 					row =  row.replaceFirst(regex_item_order_replace, "");
 					row = this.trimSymbol(row);
-					builder.append(insert_html_newline).append(System.lineSeparator()).append(row);
+					builder.append(insert_html_newline).append(regex_line_separator).append(row);
 				}else if(this.isExists(regex_analysis_exists,row)){//解析
-					builder.append(insert_html_newline).append(System.lineSeparator()).append(row);
+					builder.append(insert_html_newline).append(regex_line_separator).append(row);
 				}else {//题目内容
 					builder.append(row);
 				}
@@ -69,7 +70,7 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 	 */
 	@Override
 	protected ClientUploadItem convertHander(String content) {
-		String [] lines = content.split(System.lineSeparator());
+		String [] lines = content.split(regex_line_separator);
 		if(lines != null && lines.length > 0){
 			Map<String, String> map = new TreeMap<String,String>(new Comparator<String>(){ @Override public int compare(String o1, String o2) { return o1.compareTo(o2); } });
 			StringBuilder builder = new StringBuilder();
@@ -189,20 +190,20 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 		StringBuilder html = new StringBuilder();
 		ItemScoreInfo item = null;
 		if(source != null && (item = source.getItem()) != null){
-			html.append(System.lineSeparator()).append("<br/>");
+			html.append(regex_line_separator).append("<br/>");
 			if(!StringUtils.isEmpty(item.getSerial())) html.append("<span>").append(item.getSerial()).append(".").append("</span>");
-			html.append(item.getContent()).append("<br/>").append(System.lineSeparator());
+			html.append(item.getContent()).append("<br/>").append(regex_line_separator);
 			if(item.getChildren() != null && item.getChildren().size() > 0){
 				ItemScoreInfo[] opts = item.getChildren().toArray(new ItemScoreInfo[0]);
 				Arrays.sort(opts, new Comparator<ItemScoreInfo>() {@Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
 				for(ItemScoreInfo opt : opts){
-					html.append(this.renderOptionsHtml(item.getId(), opt, item.getAnswer())).append("<br/>").append(System.lineSeparator());
+					html.append(this.renderOptionsHtml(item.getId(), opt, item.getAnswer())).append("<br/>").append(regex_line_separator);
 				}
 			}
 			if(!StringUtils.isEmpty(item.getAnalysis())){
-				html.append(System.lineSeparator()).append("<br/>").append(System.lineSeparator());
+				html.append(regex_line_separator).append("<br/>").append(regex_line_separator);
 				html.append("[答案解析]");
-				html.append(System.lineSeparator()).append("<br/>").append(System.lineSeparator());
+				html.append(regex_line_separator).append("<br/>").append(regex_line_separator);
 				html.append(item.getAnalysis());
 			}
 		}
