@@ -24,6 +24,7 @@ import com.examw.test.imports.service.ItemTypeFormat;
  * @since 2014年9月11日
  */
 public abstract class BaseItemTypeFormat implements ItemTypeFormat {
+	private static final String regex_line_separator = "\n";//换行符。
 	private static final String regex_item_find_order = "^(\\d+)\\.";//查找题序。
 	private static final String insert_html_newline ="<br/><br/>";//插入html空行符。
 	private static final String regex_row_right_newline = "^(<br/>)+$";//去掉右边的html换行。
@@ -36,7 +37,7 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 	 */
 	@Override
 	public void format(JTextComponent textComponent) throws Exception {
-		 String[] rows = textComponent.getText().split(System.lineSeparator());
+		 String[] rows = textComponent.getText().split(regex_line_separator);
 		 if(rows != null && rows.length > 0){
 			 Map<Integer, String> map = new TreeMap<Integer,String>(new Comparator<Integer>() {@Override public int compare(Integer o1, Integer o2) {return o1 - o2;}});
 			 StringBuilder singleBuilder = new StringBuilder();
@@ -47,13 +48,13 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 				 String orderValue =  this.find(regex_item_find_order, row, 1);
 				 order = StringUtils.isEmpty(orderValue) ? null : new Integer(orderValue);
 				 if(order ==  null){
-					 if(singleBuilder.length() > 0) singleBuilder.append(System.lineSeparator());
+					 if(singleBuilder.length() > 0) singleBuilder.append(regex_line_separator);
 					 singleBuilder.append(row);
 				 }else {
 					 if(current_order != null){
 						 if(map.containsKey(current_order)){
 							 String content = map.get(current_order);
-							 if(!StringUtils.isEmpty(content))singleBuilder.insert(0, System.lineSeparator()).insert(0, content);
+							 if(!StringUtils.isEmpty(content))singleBuilder.insert(0, regex_line_separator).insert(0, content);
 						 }
 						 map.put(current_order, singleBuilder.toString());
 					 }
@@ -65,7 +66,7 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 			 if(current_order != null){
 				 if(map.containsKey(current_order)){
 					 String content = map.get(current_order);
-					 if(!StringUtils.isEmpty(content))singleBuilder.insert(0, System.lineSeparator()).insert(0, content);
+					 if(!StringUtils.isEmpty(content))singleBuilder.insert(0, regex_line_separator).insert(0, content);
 				 }
 				 map.put(current_order, singleBuilder.toString());
 			 }
@@ -74,7 +75,7 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 			 for(String content : map.values()){
 				 if(StringUtils.isEmpty(content)) continue;
 				 builder.append(this.itemFormatHandler(content));
-				 builder.append(System.lineSeparator()).append(insert_html_newline).append(System.lineSeparator());
+				 builder.append(regex_line_separator).append(insert_html_newline).append(regex_line_separator);
 			 }
 			 textComponent.setText(builder.toString());
 		 }

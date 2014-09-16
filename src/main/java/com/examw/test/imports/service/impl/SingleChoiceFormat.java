@@ -20,7 +20,7 @@ import com.examw.test.imports.service.ItemHtmlPreview;
  * @since 2014年9月4日
  */
 public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPreview {
-	private static final String regex_line_separator = "\n";
+	private static final String regex_line_separator = "\n";//换行符。
 	private static final String regex_opts_exists = "^([A-Z]\\.)";//判断选项存在。
 	private static final String regex_opts_split = "[A-Z]\\.";//按选项进行分组。
 	private static final String regex_answers_exists = "\\[答案\\]";//判断答案存在。
