@@ -73,7 +73,7 @@ public class RightMenuFormatModel extends RightMenuBaseModel {
 			return;
 		}
 		try {
-			format.format(this.textComponent);
+			this.textComponent.setText(format.format(this.textComponent.getText()));
 			if(this.uploadFormatComponent != null){
 				this.uploadFormatComponent.setText(format.uploadFormatJson(this.textComponent.getText(),  itemTypeValue));
 			}

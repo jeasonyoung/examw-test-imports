@@ -1,7 +1,6 @@
 package com.examw.test.imports.service.impl;
 
 import com.examw.test.imports.model.ClientUploadItem;
-import com.examw.test.imports.service.ItemHtmlPreview;
 
 /**
  * 判断题格式化。
@@ -9,7 +8,7 @@ import com.examw.test.imports.service.ItemHtmlPreview;
  * @author yangyong
  * @since 2014年9月4日
  */
-public class JudgeFormat extends BaseItemTypeFormat implements ItemHtmlPreview {
+public class JudgeFormat extends BaseItemTypeFormat {
 
 	@Override
 	protected String itemFormatHandler(String item) {

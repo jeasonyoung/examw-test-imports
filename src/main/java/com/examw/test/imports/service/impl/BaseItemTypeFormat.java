@@ -9,12 +9,11 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.text.JTextComponent;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.util.StringUtils;
 
 import com.examw.test.imports.model.ClientUploadItem;
+import com.examw.test.imports.service.ItemHtmlPreview;
 import com.examw.test.imports.service.ItemTypeFormat;
 
 /**
@@ -23,12 +22,28 @@ import com.examw.test.imports.service.ItemTypeFormat;
  * @author yangyong
  * @since 2014年9月11日
  */
-public abstract class BaseItemTypeFormat implements ItemTypeFormat {
-	private static final String regex_line_separator = "\n";//换行符。
-	private static final String regex_item_find_order = "^(\\d+)\\.";//查找题序。
-	private static final String insert_html_newline ="<br/><br/>";//插入html空行符。
-	private static final String regex_row_right_newline = "^(<br/>)+$";//去掉右边的html换行。
-	private static final String regex_item_html_newline_split = "(<br/><br/>)";//html空行符。
+public abstract class BaseItemTypeFormat implements ItemTypeFormat,ItemHtmlPreview {
+	/**
+	 * 换行符。
+	 */
+	protected static final String regex_line_separator = "\n";
+	/**
+	 * 查找题序。
+	 */
+	protected static final String regex_item_find_order = "^(\\d+)[\\.|．]";
+	/**
+	 * 插入html空行符。
+	 */
+	protected static final String insert_html_blanklines ="<br/><br/>";
+	/**
+	 * 按html空行符进行拆分。
+	 */
+	protected static final String regex_item_html_blanklines_split = "(<br/><br/>)";
+	/**
+	 * 去掉右边的html换行。
+	 */
+	protected static final String regex_row_right_newline = "((<br/>)+)$";//
+	
 	private static final String regex_row_left_trim = "^[　*| *| *|//s*]*";//去掉左边空格（包括全角/半角空格 Tab 制表符等）。
 	private static final String regex_row_right_trim = "[　*| *| *|//s*]*$";//去掉右边空格（包括全角/半角空格 Tab 制表符等）。
 	/*
@@ -36,12 +51,12 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 	 * @see com.examw.test.imports.service.ItemTypeFormat#format(javax.swing.text.JTextComponent)
 	 */
 	@Override
-	public void format(JTextComponent textComponent) throws Exception {
-		 String[] rows = textComponent.getText().split(regex_line_separator);
+	public String format(String sources) throws Exception {
+		 String[] rows = sources.split(regex_line_separator);
 		 if(rows != null && rows.length > 0){
 			 Map<Integer, String> map = new TreeMap<Integer,String>(new Comparator<Integer>() {@Override public int compare(Integer o1, Integer o2) {return o1 - o2;}});
-			 StringBuilder singleBuilder = new StringBuilder();
 			 Integer current_order = null, order = null;
+			 StringBuilder singleBuilder = new StringBuilder();
 			 for(String row : rows){
 				 row = this.trimSymbol(row);
 				 if(StringUtils.isEmpty(row)) continue;
@@ -75,10 +90,11 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 			 for(String content : map.values()){
 				 if(StringUtils.isEmpty(content)) continue;
 				 builder.append(this.itemFormatHandler(content));
-				 builder.append(regex_line_separator).append(insert_html_newline).append(regex_line_separator);
+				 builder.append(regex_line_separator).append(insert_html_blanklines).append(regex_line_separator);
 			 }
-			 textComponent.setText(builder.toString());
+			 return builder.toString();
 		 }
+		 return null;
 	}
 	/**
 	 * 按题格式化处理。
@@ -93,7 +109,7 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 	public String uploadFormatJson(String format,String type) throws Exception {
 		if(StringUtils.isEmpty(format)) return format;
 		 List<ClientUploadItem> list = new ArrayList<ClientUploadItem>();
-		 String[] rows = format.split(regex_item_html_newline_split);
+		 String[] rows = format.split(regex_item_html_blanklines_split);
 		 if(rows != null && rows.length > 0){
 			for(String row : rows){
 				row = this.trimSymbol(row);
@@ -101,8 +117,8 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 				ClientUploadItem clientUploadItem = this.convertHander(row);
 				if(!StringUtils.isEmpty(type) && clientUploadItem != null && clientUploadItem.getItem() != null){
 					clientUploadItem.getItem().setType(new Integer(type));
+					list.add(clientUploadItem);
 				}
-				list.add(clientUploadItem);
 			}
 		 }
 		if(list.size() > 0){
@@ -141,7 +157,7 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat {
 		if(!StringUtils.isEmpty(source)){
 			result = source.replaceAll(regex_row_left_trim, "").replaceAll(regex_row_right_trim, "");
 			result = result.replaceAll(regex_row_right_newline, "");
-			String find = this.find("^(\\d+。)", result, 1);
+			String find = this.find("^(\\d+[。|．])", result, 1);
 			if(!StringUtils.isEmpty(find)){
 				result = result.replace(find, find.substring(0, find.length() - 1) + ".");
 			}

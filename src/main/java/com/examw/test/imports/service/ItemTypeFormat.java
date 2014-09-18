@@ -1,7 +1,4 @@
 package com.examw.test.imports.service;
-
-import javax.swing.text.JTextComponent;
-
 /**
  * 题型格式化。
  * 
@@ -13,7 +10,7 @@ public interface ItemTypeFormat {
 	 * 格式化处理。
 	 * @param textComponent
 	 */
-	void format(JTextComponent textComponent) throws Exception;
+	String format(String sources) throws Exception;
 	/**
 	 * 格式化为上传的json格式。
 	 * @param format

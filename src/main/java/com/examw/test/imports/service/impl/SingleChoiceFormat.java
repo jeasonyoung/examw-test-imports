@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 
 import com.examw.test.imports.model.ClientUploadItem;
 import com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo;
-import com.examw.test.imports.service.ItemHtmlPreview;
 
 /**
  * 单选题格式化。
@@ -19,17 +18,40 @@ import com.examw.test.imports.service.ItemHtmlPreview;
  * @author yangyong
  * @since 2014年9月4日
  */
-public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPreview {
-	private static final String regex_line_separator = "\n";//换行符。
-	private static final String regex_opts_exists = "^([A-Z]\\.)";//判断选项存在。
-	private static final String regex_opts_split = "[A-Z]\\.";//按选项进行分组。
-	private static final String regex_answers_exists = "\\[答案\\]";//判断答案存在。
-	private static final String regex_item_order_replace = "^(\\d+)\\.";//替换题序。
-	private static final String regex_analysis_exists = "\\[解析\\]";//判断解析存在。
-	private static final String insert_html_newline = "<br/>";//插入html换行符。
-	private static final String regex_replace_html_newline = "(<br/>)$";//替换html尾部换行符。
-	private static final String regex_find_opt_head = "([A-Z]\\.)$";//查找选项头字母。
-	private static final String regex_item_convert_handler = "^(\\d+|[A-Z]|\\[(答案|解析)\\])(\\.?)";//题目内转换处理。
+public class SingleChoiceFormat extends BaseItemTypeFormat {
+	/**
+	 * 判断选项存在。
+	 */
+	protected static final String regex_opts_exists = "^([A-Z|a-z][\\.|．])";
+	/**
+	 * 按选项进行分组。
+	 */
+	protected static final String regex_opts_split = "[A-Z|a-z][\\.|．]";
+	/**
+	 * 查找选项头字母。
+	 */
+	protected static final String regex_find_opt_head = "([A-Z|a-z][\\.|．])$";
+	/**
+	 * 判断答案存在。
+	 */
+	protected static final String regex_answers_exists = "\\[答案\\]";
+	/**
+	 * 替换题序。
+	 */
+	protected static final String regex_item_order_replace = "^(\\d+)[\\.|．]";
+	/**
+	 * 判断解析存在。
+	 */
+	protected static final String regex_analysis_exists = "\\[解析\\]";
+	/**
+	 * 插入html换行符。
+	 */
+	protected static final String insert_html_newline = "<br/>";
+	//private static final String regex_replace_html_newline = "(<br/>)$";//替换html尾部换行符。
+	/**
+	 * 题目内转换处理。
+	 */
+	protected static final String regex_item_convert_handler = "^(\\d+|[A-Z]|\\[(答案|解析)\\])(\\.?)";
 	/*
 	 * (non-Javadoc)
 	 * @see com.examw.test.imports.service.impl.BaseItemTypeFormat#itemFormatHandler(java.lang.String)
@@ -70,7 +92,24 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 	 */
 	@Override
 	protected ClientUploadItem convertHander(String content) {
-		String [] lines = content.split(regex_line_separator);
+		ClientUploadItem clientUploadItem = new ClientUploadItem();
+		ItemScoreInfo item = this.convertItem(content);
+		if(item != null){
+			clientUploadItem.setItem(item);
+			String serial = item.getSerial();
+			if(!StringUtils.isEmpty(serial)){
+				clientUploadItem.setOrderNo(new Integer(serial));
+			}
+		}
+		return clientUploadItem;
+	}
+	/**
+	 * 转换为题目。
+	 * @param source
+	 * @return
+	 */
+	protected ItemScoreInfo convertItem(String source){
+		String [] lines = source.split(regex_line_separator);
 		if(lines != null && lines.length > 0){
 			Map<String, String> map = new TreeMap<String,String>(new Comparator<String>(){ @Override public int compare(String o1, String o2) { return o1.compareTo(o2); } });
 			StringBuilder builder = new StringBuilder();
@@ -101,7 +140,7 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 				 }
 				 map.put(current_order, builder.toString());
 			}
-			return this.convertHander(map);
+			return this.convertItem(map);
 		}
 		return null;
 	}
@@ -110,57 +149,44 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 	 * @param map
 	 * @return
 	 */
-	protected ClientUploadItem convertHander(Map<String, String> map){
+	protected ItemScoreInfo convertItem(Map<String, String> map){
 		if(map == null || map.size() == 0) return null;
-		ClientUploadItem clientUploadItem = new ClientUploadItem();
 		Set<ItemScoreInfo> children = new TreeSet<ItemScoreInfo>(new Comparator<ItemScoreInfo>(){ @Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
 		Integer children_orderNo = 1;
+		ItemScoreInfo item = new ItemScoreInfo();
 		for(Map.Entry<String, String> entry : map.entrySet()){
 			String order = entry.getKey(), content = entry.getValue();
 			if(order.matches("^\\d+")){//内容
-				clientUploadItem.setOrderNo(new Integer(order));
-				clientUploadItem.getItem().setSerial(order);
-				clientUploadItem.getItem().setOrderNo(0);
-				clientUploadItem.getItem().setContent(content.replaceFirst(regex_item_order_replace, "").trim());
+				//clientUploadItem.setOrderNo(new Integer(order));
+				item.setSerial(order);
+				item.setOrderNo(0);
+				item.setContent(content.replaceFirst(regex_item_order_replace, "").trim());
 			}else if(order.matches(regex_answers_exists)){//答案
-				clientUploadItem.getItem().setAnswer(content.replaceFirst(regex_answers_exists, "").trim());
+				item.setAnswer(content.replaceFirst(regex_answers_exists, "").trim());
 			}else if(order.matches(regex_analysis_exists)){//解析
-				clientUploadItem.getItem().setAnalysis(content.replaceFirst(regex_analysis_exists, "").trim());
+				item.setAnalysis(content.replaceFirst(regex_analysis_exists, "").trim());
 			}else {
 				children.add(new ItemScoreInfo(content, children_orderNo++));
 			}
 		}
-		if(children.size() > 0) clientUploadItem.getItem().setChildren(children);
-		return this.convertHander(clientUploadItem);
+		if(children.size() > 0) item.setChildren(children);
+		return this.convertHander(item);
 	}
 	/**
 	 * 转换整理。
 	 * @param source
 	 * @return
 	 */
-	protected ClientUploadItem convertHander(ClientUploadItem source){
-		if(source != null && source.getItem() != null){
-			 ItemScoreInfo item = source.getItem();
-			 if(!StringUtils.isEmpty(item.getAnswer()) && item.getChildren() != null){
-				 for(ItemScoreInfo opt : item.getChildren()){
-					if(opt.getContent().indexOf(item.getAnswer()) > -1){
-						item.setAnswer(opt.getId());
+	protected ItemScoreInfo convertHander(ItemScoreInfo source){
+		if(source != null){
+			 if(!StringUtils.isEmpty(source.getAnswer()) && source.getChildren() != null){
+				 for(ItemScoreInfo opt : source.getChildren()){
+					if(opt.getContent().indexOf(source.getAnswer()) > -1){
+						source.setAnswer(opt.getId());
 					}
 					//opt.setContent(opt.getContent().replaceFirst(regex_opts_exists, "").trim());
 				 }
 			 }
-		}
-		return source;
-	}
-	/*
-	 * (non-Javadoc)
-	 * @see com.examw.test.imports.service.impl.BaseItemTypeFormat#trimSymbol(java.lang.String)
-	 */
-	@Override
-	protected String trimSymbol(String source) {
-		source = super.trimSymbol(source);
-		if(!StringUtils.isEmpty(source)){
-			source = source.replaceFirst(regex_replace_html_newline, "").trim();
 		}
 		return source;
 	}
@@ -176,7 +202,10 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 		if(index > - 1){
 			String sub = line.substring(0, index);
 			if(!StringUtils.isEmpty(sub)){
-				return this.find(regex_find_opt_head, sub, 1);
+				String optOrder = this.find(regex_find_opt_head, sub, 1);
+				if(!StringUtils.isEmpty(optOrder)){
+					return optOrder.charAt(0) + ".";
+				}
 			}
 		}
 		return null;
@@ -187,25 +216,35 @@ public class SingleChoiceFormat extends BaseItemTypeFormat implements ItemHtmlPr
 	 */
 	@Override
 	public String htmlPreview(ClientUploadItem source) {
-		StringBuilder html = new StringBuilder();
 		ItemScoreInfo item = null;
 		if(source != null && (item = source.getItem()) != null){
-			html.append(regex_line_separator).append("<br/>");
-			if(!StringUtils.isEmpty(item.getSerial())) html.append("<span>").append(item.getSerial()).append(".").append("</span>");
-			html.append(item.getContent()).append("<br/>").append(regex_line_separator);
-			if(item.getChildren() != null && item.getChildren().size() > 0){
-				ItemScoreInfo[] opts = item.getChildren().toArray(new ItemScoreInfo[0]);
-				Arrays.sort(opts, new Comparator<ItemScoreInfo>() {@Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
-				for(ItemScoreInfo opt : opts){
-					html.append(this.renderOptionsHtml(item.getId(), opt, item.getAnswer())).append("<br/>").append(regex_line_separator);
-				}
+			return this.htmlPreview(item);
+		}
+		return "";
+	}
+	/**
+	 * 题目html预览。
+	 * @param item
+	 * @return
+	 */
+	protected String htmlPreview(ItemScoreInfo item){
+		if(item == null) return "";
+		StringBuilder html = new StringBuilder();
+		html.append(regex_line_separator).append("<br/>");
+		if(!StringUtils.isEmpty(item.getSerial())) html.append("<span>").append(item.getSerial()).append(".").append("</span>");
+		html.append(item.getContent()).append("<br/>").append(regex_line_separator);
+		if(item.getChildren() != null && item.getChildren().size() > 0){
+			ItemScoreInfo[] opts = item.getChildren().toArray(new ItemScoreInfo[0]);
+			Arrays.sort(opts, new Comparator<ItemScoreInfo>() {@Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
+			for(ItemScoreInfo opt : opts){
+				html.append(this.renderOptionsHtml(item.getId(), opt, item.getAnswer())).append("<br/>").append(regex_line_separator);
 			}
-			if(!StringUtils.isEmpty(item.getAnalysis())){
-				html.append(regex_line_separator).append("<br/>").append(regex_line_separator);
-				html.append("[答案解析]");
-				html.append(regex_line_separator).append("<br/>").append(regex_line_separator);
-				html.append(item.getAnalysis());
-			}
+		}
+		if(!StringUtils.isEmpty(item.getAnalysis())){
+			html.append(regex_line_separator).append("<br/>").append(regex_line_separator);
+			html.append("[答案解析]");
+			html.append(regex_line_separator).append("<br/>").append(regex_line_separator);
+			html.append(item.getAnalysis());
 		}
 		return html.toString();
 	}

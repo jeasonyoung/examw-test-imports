@@ -2,7 +2,6 @@ package com.examw.test.imports.service.impl;
 
 import org.springframework.util.StringUtils;
 
-import com.examw.test.imports.model.ClientUploadItem;
 import com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo;
 
 /**
@@ -18,19 +17,18 @@ public class MultyChoiceFormat extends SingleChoiceFormat {
 	 * @see com.examw.test.imports.service.impl.SingleChoiceFormat#convertHander(com.examw.test.imports.model.ClientUploadItem)
 	 */
 	@Override
-	protected ClientUploadItem convertHander(ClientUploadItem source) {
-		 if(source != null && source.getItem() != null){
-			 ItemScoreInfo item = source.getItem();
-			 if(!StringUtils.isEmpty(item.getAnswer()) && item.getChildren() != null){
+	protected ItemScoreInfo convertHander(ItemScoreInfo source) {
+		 if(source != null){
+			 if(!StringUtils.isEmpty(source.getAnswer()) && source.getChildren() != null){
 				 StringBuilder answers = new StringBuilder();
-				 for(ItemScoreInfo opt : item.getChildren()){
+				 for(ItemScoreInfo opt : source.getChildren()){
 					 String start = this.find(regex_opts_start, opt.getContent(), 1);
-					 if(!StringUtils.isEmpty(start) && item.getAnswer().indexOf(start) > -1){
+					 if(!StringUtils.isEmpty(start) && source.getAnswer().indexOf(start) > -1){
 						 if(answers.length() > 0) answers.append(",");
 						 answers.append(opt.getId());
 					 }
 				 }
-				 item.setAnswer(answers.toString());
+				 source.setAnswer(answers.toString());
 			 }
 		 }
 		 return source;

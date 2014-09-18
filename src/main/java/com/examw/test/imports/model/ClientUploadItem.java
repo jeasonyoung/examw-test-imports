@@ -83,7 +83,7 @@ public class ClientUploadItem implements Serializable {
 	 * @since 2014年9月11日
 	 */
 	@JsonSerialize(include = Inclusion.NON_NULL)
-	public static class ItemScoreInfo implements Serializable {
+	public static class ItemScoreInfo implements Serializable,Comparable<ItemScoreInfo> {
 		private static final long serialVersionUID = 1L;
 		private String  pid,id,serial,examId,content,answer,analysis;
 		private Integer type,orderNo;
@@ -254,5 +254,18 @@ public class ClientUploadItem implements Serializable {
 		public void setChildren(Set<ItemScoreInfo> children) {
 			this.children = children;
 		}
+		/*
+		 * 比较。
+		 * @see java.lang.Comparable#compareTo(java.lang.Object)
+		 */
+		@Override
+		public int compareTo(ItemScoreInfo o) {
+			int index = this.getOrderNo() - o.getOrderNo();
+			if(index == 0){
+				index = this.getContent().compareTo(o.getContent());
+			}
+			return index;
+		}
+		
 	}
 }
