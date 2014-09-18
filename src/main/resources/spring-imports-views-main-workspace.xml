@@ -263,6 +263,22 @@
 		                          </bean>
 		                      </property>
 		                  </bean>
+		                  <bean class="javax.swing.JMenuItem">
+		                      <constructor-arg type="String" value="${main_workspace_right_clear}" /><!--清空 -->
+		                      <property name="accelerator">
+		                          <bean class="javax.swing.KeyStroke" factory-method="getKeyStroke">
+		                              <constructor-arg type="Character" value="D" />
+		                              <constructor-arg type="int">
+		                                  <util:constant static-field="java.awt.event.InputEvent.CTRL_MASK"/>
+		                              </constructor-arg>
+		                          </bean>
+		                      </property>
+		                     <property name="model">
+		                          <bean class="com.examw.test.imports.view.model.RightMenuCleanModel">
+		                              <constructor-arg ref="workspaceSourceArea" />
+		                          </bean>
+		                      </property>
+		                  </bean>
                   		  <bean class="javax.swing.JPopupMenu.Separator" /><!-- 分隔 -->
                   		  <bean class="javax.swing.JMenuItem">
 		                      <constructor-arg type="String" value="${main_workspace_right_format}" /><!--格式化 -->
