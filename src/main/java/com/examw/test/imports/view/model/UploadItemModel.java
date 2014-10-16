@@ -57,9 +57,9 @@ public class UploadItemModel extends DefaultButtonModel {
 					this.showMessageDialog("上传试题源代码格式不正确!");
 					return;
 				}
-				clientUploadItem.setStructureId(this.uploadPreview.getPaperStructureId());
+				//clientUploadItem.setStructureId(this.uploadPreview.getPaperStructureId());
 				if(JOptionPane.showConfirmDialog(null, "确认是否上传？", "确认", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION){
-					boolean result = this.itemUploadRemoteService.upload(this.uploadPreview.getPaperId(), clientUploadItem);
+					boolean result = this.itemUploadRemoteService.upload(this.uploadPreview.getPaperId(), this.uploadPreview.getPaperStructureId(), clientUploadItem);
 					this.showMessageDialog("提示", "导入试题［" + (result ? "成功" : "失败") + "］！", result ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
 				}
 			} catch(Exception e1) {

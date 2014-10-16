@@ -115,14 +115,14 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat,ItemHtmlPrevi
 				row = this.trimSymbol(row);
 				if(StringUtils.isEmpty(row)) continue;
 				ClientUploadItem clientUploadItem = this.convertHander(row);
-				if(!StringUtils.isEmpty(type) && clientUploadItem != null && clientUploadItem.getItem() != null){
-					clientUploadItem.getItem().setType(new Integer(type));
+				if(!StringUtils.isEmpty(type) && clientUploadItem != null){
+					clientUploadItem.setType(new Integer(type));
 					list.add(clientUploadItem);
 				}
 			}
 		 }
 		if(list.size() > 0){
-			Collections.sort(list, new Comparator<ClientUploadItem>() { @Override public int compare(ClientUploadItem o1, ClientUploadItem o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
+			Collections.sort(list);
 			ObjectMapper mapper = new ObjectMapper();
 			return mapper.writeValueAsString(list);
 		}

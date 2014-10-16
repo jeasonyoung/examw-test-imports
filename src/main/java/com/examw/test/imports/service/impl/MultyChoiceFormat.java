@@ -2,7 +2,7 @@ package com.examw.test.imports.service.impl;
 
 import org.springframework.util.StringUtils;
 
-import com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo;
+import com.examw.test.imports.model.ClientUploadItem;
 
 /**
  * 多选题格式化。
@@ -13,15 +13,16 @@ import com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo;
 public class MultyChoiceFormat extends SingleChoiceFormat {
 	private static final String regex_opts_start = "^([A-Z])(\\.)?";//判断选项存在。
 	/*
-	 * (non-Javadoc)
+	 * 转换答案处理。
 	 * @see com.examw.test.imports.service.impl.SingleChoiceFormat#convertHander(com.examw.test.imports.model.ClientUploadItem)
 	 */
-	@Override
-	protected ItemScoreInfo convertHander(ItemScoreInfo source) {
-		 if(source != null){
+	 @Override
+	protected ClientUploadItem convertAnswersHander(ClientUploadItem source) {
+		 if(source != null && !StringUtils.isEmpty(source.getAnswer())){
 			 if(!StringUtils.isEmpty(source.getAnswer()) && source.getChildren() != null){
 				 StringBuilder answers = new StringBuilder();
-				 for(ItemScoreInfo opt : source.getChildren()){
+				 for(ClientUploadItem opt : source.getChildren()){
+					 if(opt == null || StringUtils.isEmpty(opt.getContent())) continue;
 					 String start = this.find(regex_opts_start, opt.getContent(), 1);
 					 if(!StringUtils.isEmpty(start) && source.getAnswer().indexOf(start) > -1){
 						 if(answers.length() > 0) answers.append(",");
@@ -38,7 +39,7 @@ public class MultyChoiceFormat extends SingleChoiceFormat {
 	 * @see com.examw.test.imports.service.impl.SingleChoiceFormat#renderOptionsHtml(java.lang.String, com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo, java.lang.String)
 	 */
 	@Override
-	protected String renderOptionsHtml(String itemId, ItemScoreInfo opt, String answers) {
+	protected String renderOptionsHtml(String itemId, ClientUploadItem opt, String answers) {
 		if(opt == null) return null;
 		StringBuilder optBuilder = new StringBuilder("<label>");
 		optBuilder.append("<input type='checkbox' name='").append(itemId).append("' ");

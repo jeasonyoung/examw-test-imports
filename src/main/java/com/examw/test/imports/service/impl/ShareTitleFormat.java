@@ -15,7 +15,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.util.StringUtils;
 
 import com.examw.test.imports.model.ClientUploadItem;
-import com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo;
 
 /**
  * 共享提干格式化。
@@ -78,8 +77,8 @@ public class ShareTitleFormat extends UncertainChoiceFormat {
 			List<ClientUploadItem> list = shareTitleItems.toClientUploadItems();
 			if(list.size() > 0){
 				for(ClientUploadItem clientUploadItem : list){
-					if(clientUploadItem == null || clientUploadItem.getItem() == null) continue;
-					clientUploadItem.getItem().setType(new Integer(type));
+					if(clientUploadItem == null) continue;
+					clientUploadItem.setType(new Integer(type));
 				}
 				Collections.sort(list, new Comparator<ClientUploadItem>() { 
 					@Override 
@@ -102,15 +101,15 @@ public class ShareTitleFormat extends UncertainChoiceFormat {
 		if(source == null) return null;
 		StringBuilder html = new StringBuilder();
 		html.append(regex_line_separator).append("<br/>");
-		ItemScoreInfo shareTitle = source.getItem();
-		if(shareTitle != null){
-			html.append(shareTitle.getContent());
-			if(shareTitle.getChildren() != null){
-				ItemScoreInfo[] items = shareTitle.getChildren().toArray(new ItemScoreInfo[0]);
-				Arrays.sort(items, new Comparator<ItemScoreInfo>() {@Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
-				for(ItemScoreInfo item : items){
+		if(source != null){
+			html.append(source.getContent());
+			if(source.getChildren() != null){
+				ClientUploadItem[] items = source.getChildren().toArray(new ClientUploadItem[0]);
+				Arrays.sort(items);
+				for(ClientUploadItem item : items){
 					 if(item == null) continue;
-					 html.append(this.htmlPreview(item));
+					 html.append(super.htmlPreview(item));
+					 html.append(regex_line_separator).append("<br/>");
 				}
 			}
 		}
@@ -370,22 +369,17 @@ public class ShareTitleFormat extends UncertainChoiceFormat {
 			ClientUploadItem clientUploadItem = new ClientUploadItem();
 			int index = number_cn.indexOf(this.titleOrder);
 			clientUploadItem.setOrderNo(index == -1 ? 0 : index);
-			clientUploadItem.getItem().setSerial(this.titleOrder);
-			clientUploadItem.getItem().setOrderNo(0);
-			clientUploadItem.getItem().setContent(this.titleContent);
+			clientUploadItem.setContent(this.titleContent);
 			if(this.getItems() != null && this.getItems().size() > 0){
-				Set<ItemScoreInfo> children = new TreeSet<ItemScoreInfo>();
+				Set<ClientUploadItem> children = new TreeSet<ClientUploadItem>();
 				for(String content : this.getItems().values()){
 					if(StringUtils.isEmpty(content)) continue;
-					ItemScoreInfo item = ShareTitleFormat.super.convertItem(content);
+					ClientUploadItem item = ShareTitleFormat.super.convertItem(content);
 					if(item == null) continue;
-					item.setType(default_item_type);
-					if(!StringUtils.isEmpty(item.getSerial())){
-						item.setOrderNo(new Integer(item.getSerial()));
-					}
+					item.setType(default_item_type); 
 					children.add(item);
 				}
-				clientUploadItem.getItem().setChildren(children);
+				clientUploadItem.setChildren(children);
 			}
 			return clientUploadItem;
 		}

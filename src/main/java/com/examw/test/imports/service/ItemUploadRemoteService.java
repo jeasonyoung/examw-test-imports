@@ -16,5 +16,5 @@ public interface ItemUploadRemoteService {
 	 * @return
 	 * @throws Exception
 	 */
-	boolean upload(String paperId, ClientUploadItem data) throws Exception;
+	boolean upload(String paperId,String structureId, ClientUploadItem data) throws Exception;
 }

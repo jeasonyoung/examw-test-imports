@@ -10,8 +10,6 @@ import java.util.TreeSet;
 import org.springframework.util.StringUtils;
 
 import com.examw.test.imports.model.ClientUploadItem;
-import com.examw.test.imports.model.ClientUploadItem.ItemScoreInfo;
-
 /**
  * 单选题格式化。
  * 
@@ -92,23 +90,14 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 	 */
 	@Override
 	protected ClientUploadItem convertHander(String content) {
-		ClientUploadItem clientUploadItem = new ClientUploadItem();
-		ItemScoreInfo item = this.convertItem(content);
-		if(item != null){
-			clientUploadItem.setItem(item);
-			String serial = item.getSerial();
-			if(!StringUtils.isEmpty(serial)){
-				clientUploadItem.setOrderNo(new Integer(serial));
-			}
-		}
-		return clientUploadItem;
+		return this.convertItem(content);
 	}
 	/**
 	 * 转换为题目。
 	 * @param source
 	 * @return
 	 */
-	protected ItemScoreInfo convertItem(String source){
+	protected ClientUploadItem convertItem(String source){
 		String [] lines = source.split(regex_line_separator);
 		if(lines != null && lines.length > 0){
 			Map<String, String> map = new TreeMap<String,String>(new Comparator<String>(){ @Override public int compare(String o1, String o2) { return o1.compareTo(o2); } });
@@ -149,42 +138,41 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 	 * @param map
 	 * @return
 	 */
-	protected ItemScoreInfo convertItem(Map<String, String> map){
+	protected ClientUploadItem convertItem(Map<String, String> map){
 		if(map == null || map.size() == 0) return null;
-		Set<ItemScoreInfo> children = new TreeSet<ItemScoreInfo>(new Comparator<ItemScoreInfo>(){ @Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
+		Set<ClientUploadItem> children = new TreeSet<ClientUploadItem>();
 		Integer children_orderNo = 1;
-		ItemScoreInfo item = new ItemScoreInfo();
+		ClientUploadItem item = new ClientUploadItem();
 		for(Map.Entry<String, String> entry : map.entrySet()){
 			String order = entry.getKey(), content = entry.getValue();
 			if(order.matches("^\\d+")){//内容
-				//clientUploadItem.setOrderNo(new Integer(order));
-				item.setSerial(order);
-				item.setOrderNo(0);
+				item.setOrderNo(Integer.parseInt(order));
 				item.setContent(content.replaceFirst(regex_item_order_replace, "").trim());
 			}else if(order.matches(regex_answers_exists)){//答案
 				item.setAnswer(content.replaceFirst(regex_answers_exists, "").trim());
 			}else if(order.matches(regex_analysis_exists)){//解析
 				item.setAnalysis(content.replaceFirst(regex_analysis_exists, "").trim());
 			}else {
-				children.add(new ItemScoreInfo(content, children_orderNo++));
+				children.add(new ClientUploadItem(content, children_orderNo++));
 			}
 		}
 		if(children.size() > 0) item.setChildren(children);
-		return this.convertHander(item);
+		return this.convertAnswersHander(item);
 	}
 	/**
 	 * 转换整理。
 	 * @param source
 	 * @return
 	 */
-	protected ItemScoreInfo convertHander(ItemScoreInfo source){
-		if(source != null){
+	protected ClientUploadItem convertAnswersHander(ClientUploadItem source){
+		if(source != null && !StringUtils.isEmpty(source.getAnswer())){
 			 if(!StringUtils.isEmpty(source.getAnswer()) && source.getChildren() != null){
-				 for(ItemScoreInfo opt : source.getChildren()){
+				 for(ClientUploadItem opt : source.getChildren()){
+					if(opt == null || StringUtils.isEmpty(opt.getContent())) continue;
 					if(opt.getContent().indexOf(source.getAnswer()) > -1){
 						source.setAnswer(opt.getId());
+						break;
 					}
-					//opt.setContent(opt.getContent().replaceFirst(regex_opts_exists, "").trim());
 				 }
 			 }
 		}
@@ -211,32 +199,20 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 		return null;
 	}
 	/*
-	 * (non-Javadoc)
+	 *  试题Html预览。
 	 * @see com.examw.test.imports.service.ItemHtmlPreview#htmlPreview(com.examw.test.imports.model.ClientUploadItem)
 	 */
 	@Override
-	public String htmlPreview(ClientUploadItem source) {
-		ItemScoreInfo item = null;
-		if(source != null && (item = source.getItem()) != null){
-			return this.htmlPreview(item);
-		}
-		return "";
-	}
-	/**
-	 * 题目html预览。
-	 * @param item
-	 * @return
-	 */
-	protected String htmlPreview(ItemScoreInfo item){
+	public String htmlPreview(ClientUploadItem item) {
 		if(item == null) return "";
 		StringBuilder html = new StringBuilder();
 		html.append(regex_line_separator).append("<br/>");
-		if(!StringUtils.isEmpty(item.getSerial())) html.append("<span>").append(item.getSerial()).append(".").append("</span>");
+		if(!StringUtils.isEmpty(item.getOrderNo())) html.append("<span>").append(item.getOrderNo()).append(".").append("</span>");
 		html.append(item.getContent()).append("<br/>").append(regex_line_separator);
 		if(item.getChildren() != null && item.getChildren().size() > 0){
-			ItemScoreInfo[] opts = item.getChildren().toArray(new ItemScoreInfo[0]);
-			Arrays.sort(opts, new Comparator<ItemScoreInfo>() {@Override public int compare(ItemScoreInfo o1, ItemScoreInfo o2) { return o1.getOrderNo() - o2.getOrderNo(); } });
-			for(ItemScoreInfo opt : opts){
+			ClientUploadItem[] opts = item.getChildren().toArray(new ClientUploadItem[0]);
+			Arrays.sort(opts);
+			for(ClientUploadItem opt : opts){
 				html.append(this.renderOptionsHtml(item.getId(), opt, item.getAnswer())).append("<br/>").append(regex_line_separator);
 			}
 		}
@@ -254,7 +230,7 @@ public class SingleChoiceFormat extends BaseItemTypeFormat {
 	 * @param answers
 	 * @return
 	 */
-	protected String renderOptionsHtml(String itemId, ItemScoreInfo opt, String answers){
+	protected String renderOptionsHtml(String itemId, ClientUploadItem opt, String answers){
 		if(opt == null) return null;
 		StringBuilder optBuilder = new StringBuilder("<label>");
 		optBuilder.append("<input type='radio' name='").append(itemId).append("' ");

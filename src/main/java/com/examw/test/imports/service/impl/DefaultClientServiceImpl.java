@@ -171,14 +171,14 @@ public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemo
 	 * @see com.examw.test.imports.service.ItemUploadRemoteService#upload(java.lang.String, com.examw.test.imports.model.ClientUploadItem)
 	 */
 	@Override
-	public boolean upload(String paperId, ClientUploadItem data) throws Exception {
+	public boolean upload(String paperId, String structureId, ClientUploadItem data) throws Exception {
 		if(logger.isDebugEnabled()) logger.debug(String.format("上传试题数据到试卷［paperId=%1$s］...", paperId));
 		if(StringUtils.isEmpty(paperId)) throw new Exception("所属试卷ID为空！");
 		if(data == null) throw new Exception("试题数据为NULL！");
 		String post = this.mapper.writeValueAsString(data);
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Content-type","application/json;charset=UTF-8");
-		String callback = HttpUtil.sendRequest(String.format("%1$s/update/%2$s", this.serverUrl, paperId),headers, "POST", post);
+		String callback = HttpUtil.sendRequest(String.format("%1$s/update/%2$s/%3$s", this.serverUrl, paperId, structureId),headers, "POST", post);
 		Json json = this.mapper.readValue(callback, Json.class);
 		if(json == null){
 			throw new Exception("反馈收据转换失败！callback=>" + callback);

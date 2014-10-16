@@ -93,8 +93,8 @@ public class UploadPreviewDocument extends PlainDocument implements TabbedConten
 		} catch (IOException e) { 
 			e.printStackTrace();
 		}
-		if(clientUploadItem == null || clientUploadItem.getItem() == null) return null;
-		ItemHtmlPreview preview = this.itemHtmlPreviews.get(clientUploadItem.getItem().getType().toString());
+		if(clientUploadItem == null) return null;
+		ItemHtmlPreview preview = this.itemHtmlPreviews.get(clientUploadItem.getType().toString());
 		if(preview == null) return null;
 		return preview.htmlPreview(clientUploadItem);
 	}
