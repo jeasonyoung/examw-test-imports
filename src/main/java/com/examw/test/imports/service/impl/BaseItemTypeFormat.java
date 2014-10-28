@@ -176,4 +176,24 @@ public abstract class BaseItemTypeFormat implements ItemTypeFormat,ItemHtmlPrevi
 		if(StringUtils.isEmpty(regex) || StringUtils.isEmpty(target)) return false;
 		return !StringUtils.isEmpty(this.find(regex, target, null));
 	}
+	/**
+	 * 标点符号格式化。
+	 * @param source
+	 * @return
+	 */
+	public static String formatPunctuation(String source){
+		if(StringUtils.isEmpty(source)) return source;
+		StringBuilder builder = new StringBuilder();
+		//“65281”是“！”，“65373”是“｝”，“65292”是“，”。不转换"，"
+		//“65248 是转换码距
+		for(int i = 0; i < source.length();i++){
+			char code = source.charAt(i);
+			if(code >= 65281 && code < 65373 && code != 65292 && code != 65306){
+				builder.append((char)(code - 65248));
+			}else {
+				builder.append(code);
+			}
+		}
+		return builder.toString();
+	}
 }
