@@ -111,7 +111,7 @@
 		             </constructor-arg>
 		             <property name="preferredSize">
 		                 <bean class="java.awt.Dimension">
-		                     <constructor-arg index="0" value="${main_workspace_combobox_width}" />
+		                     <constructor-arg index="0" value="198" />
 		                     <constructor-arg index="1" value="${main_workspace_combobox_height}" />
 		                 </bean>
 		             </property>
