@@ -161,10 +161,28 @@ public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemo
 		if(structureInfos != null && structureInfos.length > 0){
 			for(ClientStructureInfo structureInfo : structureInfos){
 				if(structureInfo == null) continue;
-				list.add(new KeyValueType(structureInfo.getId(), structureInfo.getTitle(), structureInfo.getType()));
+				this.createPaperStructure(0,structureInfo, list);
 			}
 		}
 		return list;
+	}
+	private void createPaperStructure(int level, ClientStructureInfo info, List<KeyValueType> list){
+		if(info == null || list == null) return;
+		String title = info.getTitle();
+		if(level > 0){
+			StringBuilder builder = new StringBuilder();
+			for(int i = 0; i < level; i++){
+				builder.append("-");
+			}
+			title = builder.append(">").append(title).toString();
+		}
+		list.add(new KeyValueType(info.getId(), title, info.getType()));
+		if(info.getChildren() != null && info.getChildren().size() > 0){
+			for(ClientStructureInfo child : info.getChildren()){
+				if(child == null) continue;
+				this.createPaperStructure(level + 1,  child, list);
+			}
+		}
 	}
 	/*
 	 * 上传试题数据。

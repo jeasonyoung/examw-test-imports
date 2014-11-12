@@ -79,7 +79,7 @@ public class PaperStructureComboBoxModel extends DefaultComboBoxModel<KeyValueTy
 		if(model != null && this.itemTypeOPService != null){
 			KeyValueType data = model.getSelected();
 			if(data != null){
-				this.itemTypeOPService.setSelected(data.getType().toString());
+				this.itemTypeOPService.setSelected(data.getType() == null ? "" : data.getType().toString());
 			}
 		}
 	}

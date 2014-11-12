@@ -1,6 +1,7 @@
 package com.examw.test.imports.model;
 
 import java.io.Serializable;
+import java.util.List;
 /**
  * 客户端试卷结构信息。
  * 
@@ -11,6 +12,7 @@ public class ClientStructureInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,title;
 	private Integer type,orderNo;
+	private List<ClientStructureInfo> children;
 	/**
 	 * 获取结构ID。
 	 * @return 结构ID。
@@ -70,5 +72,20 @@ public class ClientStructureInfo implements Serializable {
 	 */
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
+	}
+	/**
+	 * 获取子结构集合。
+	 * @return 子结构集合。
+	 */
+	public List<ClientStructureInfo> getChildren() {
+		return children;
+	}
+	/**
+	 * 设置子结构集合。
+	 * @param children 
+	 *	  子结构集合。
+	 */
+	public void setChildren(List<ClientStructureInfo> children) {
+		this.children = children;
 	}
 }

@@ -13,6 +13,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 import com.examw.test.imports.model.KeyValue;
 import com.examw.test.imports.service.ItemTypeOPService;
@@ -90,7 +91,11 @@ public class ItemTypePanel extends ContentPanel implements ItemTypeOPService {
 	 */
 	@Override
 	public void setSelected(String itemTypeValue){
-		if(itemTypeValue == null || this.itemTypeMap.size() == 0) return;
+		if(StringUtils.isEmpty(itemTypeValue)){
+			this.group.clearSelection();
+			return;
+		}
+		if(this.itemTypeMap.size() == 0) return;
 		ItemTypeRadioModel model = this.itemTypeMap.get(itemTypeValue);
 		if(model != null){
 			this.group.setSelected(model, true);
