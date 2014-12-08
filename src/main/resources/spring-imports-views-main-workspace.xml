@@ -67,8 +67,9 @@
        </constructor-arg>
        <property name="memberList">
            <list>
+               <!--  所属考试 -->
                <bean class="javax.swing.JLabel">
-		            <constructor-arg index="0" value="${main_workspace_exam}" /><!--  所属考试 -->
+		            <constructor-arg index="0" value="${main_workspace_exam}" />
 		            <constructor-arg index="1">
 		                <util:constant static-field="javax.swing.JLabel.RIGHT"/>
 		            </constructor-arg>
@@ -93,8 +94,9 @@
 		                 <bean class="com.examw.test.imports.view.KeyValueCellRenderer" />
 		             </property>
 		          </bean>
+		          <!-- 所属试卷 -->
 		          <bean class="javax.swing.JLabel">
-		            <constructor-arg  index="0" value="${main_workspace_paper}" /><!-- 所属试卷 -->
+		            <constructor-arg  index="0" value="${main_workspace_paper}" />
 		             <constructor-arg index="1">
 		                <util:constant static-field="javax.swing.JLabel.RIGHT"/>
 		            </constructor-arg>
@@ -119,8 +121,9 @@
 		                 <bean class="com.examw.test.imports.view.KeyValueCellRenderer" />
 		             </property>
 		         </bean>
+		         <!-- 试卷结构 -->
 				<bean class="javax.swing.JLabel">
-				 <constructor-arg index="0" value="${main_workspace_paper_structure}" /><!-- 试卷结构 -->
+				   <constructor-arg index="0" value="${main_workspace_paper_structure}" />
 				   <constructor-arg index="1">
 				       <util:constant static-field="javax.swing.JLabel.RIGHT"/>
 				   </constructor-arg>
@@ -138,6 +141,33 @@
 	             <property name="preferredSize">
 	                 <bean class="java.awt.Dimension">
 	                     <constructor-arg index="0" value="328" />
+	                     <constructor-arg index="1" value="${main_workspace_combobox_height}" />
+	                 </bean>
+	             </property>
+	              <property name="renderer">
+	                 <bean class="com.examw.test.imports.view.KeyValueCellRenderer" />
+	             </property>
+	         </bean>
+	         <!-- 结构下科目 -->
+	         <bean class="javax.swing.JLabel">
+	             <constructor-arg index="0" value="结构科目" />
+				 <constructor-arg index="1">
+				       <util:constant static-field="javax.swing.JLabel.RIGHT"/>
+				  </constructor-arg>
+				 <property name="preferredSize">
+				     <bean class="java.awt.Dimension">
+				            <constructor-arg index="0" value="${main_workspace_label_width}" />
+				            <constructor-arg index="1" value="${main_workspace_label_height}" />
+				     </bean>
+				 </property>
+	         </bean>
+	         <bean class="javax.swing.JComboBox">
+	             <constructor-arg>
+	                  <ref local="paperStructureSubjectComboBoxModel" />
+	              </constructor-arg>
+	             <property name="preferredSize">
+	                 <bean class="java.awt.Dimension">
+	                     <constructor-arg index="0" value="100" />
 	                     <constructor-arg index="1" value="${main_workspace_combobox_height}" />
 	                 </bean>
 	             </property>
@@ -163,7 +193,12 @@
      <!-- 所属试卷结构下拉处理模型 -->
      <bean id="paperStructureComboBoxModel" class="com.examw.test.imports.view.model.PaperStructureComboBoxModel">
          <property name="paperStructureRemoteDataService" ref="clientService" />
+         <property name="paperStructureSubjectOPService" ref="paperStructureSubjectComboBoxModel" />
          <property name="itemTypeOPService" ref="itemTypePanel" />
+     </bean>
+     <!-- 所属试卷结构下科目处理模型 -->
+     <bean id="paperStructureSubjectComboBoxModel" class="com.examw.test.imports.view.model.PaperStructureSubjectComboBoxModel">
+         
      </bean>
      <!--  题型面板 -->
      <bean id="itemTypePanel" class="com.examw.test.imports.view.ItemTypePanel">
@@ -416,6 +451,8 @@
 			                                    <constructor-arg index="0" ref="uploadPreviewDialog" />
 			                                    <constructor-arg index="1" ref="uploadPreviewDocument" />
 			                                    <constructor-arg index="2" ref="clientService" />
+			                                    <!-- 试卷结构下科目操作服务接口 -->
+			                                    <property name="paperStructureSubjectOPService" ref="paperStructureSubjectComboBoxModel" />
 			                                </bean>
 			                            </property>
 			                        </bean>

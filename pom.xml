@@ -76,12 +76,6 @@
 		<artifactId>slf4j-log4j12</artifactId>
         <version>${slf4j-api.version}</version>
   	</dependency>
-  	<!-- aspectjweaver -->
-  	<!-- <dependency>
-  		<groupId>org.aspectj</groupId>
-		  <artifactId>aspectjweaver</artifactId>
-      <version>${aspectjweaver.version}</version>
-  	</dependency> -->
   	<!-- json -->
   	<dependency>
   		<groupId>org.codehaus.jackson</groupId>
@@ -151,21 +145,6 @@
 	    			<encoding>${encoding}</encoding>
 	    		</configuration>
 	    	</plugin>
-	    	<!-- jar -->
-	    	<!-- <plugin>
-	    		<groupId>org.apache.maven.plugins</groupId>
-	    		<artifactId>maven-jar-plugin</artifactId>
-	    		<version>2.5</version>
-	    		<configuration>
-	    			<archive>
-	    				<manifest>
-	    					<addClasspath>true</addClasspath>
-	    					<classpathPrefix>lib/</classpathPrefix>
-	    					<mainClass>com.examw.test.imports.ImportRunMain</mainClass>
-	    				</manifest>
-	    			</archive>
-	    		</configuration>
-	    	</plugin> -->
 	    	<plugin>
 	    		<groupId>org.apache.maven.plugins</groupId>
 	    		<artifactId>maven-shade-plugin</artifactId>
@@ -195,26 +174,6 @@
 	    			</execution>
 	    		</executions>
 	    	</plugin>
-	    	<!-- 打包 -->
-	    	<!-- <plugin>
-	    		<groupId>org.apache.maven.plugins</groupId>
-	    		<artifactId>maven-assembly-plugin</artifactId>
-	    		<version>2.4.1</version>
-	    		<configuration>
-	    			<descriptors>
-	    				<descriptor>src/main/assembly/assembly.xml</descriptor>
-	    			</descriptors>
-	    		</configuration>
-	    		<executions>
-	    			<execution>
-	    				<id>make-assembly</id>
-	    				<phase>package</phase>
-	    				<goals>
-	    					<goal>single</goal>
-	    				</goals>
-	    			</execution>
-	    		</executions>
-	    	</plugin> -->
     </plugins>
   </build>
 </project>

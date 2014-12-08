@@ -30,6 +30,7 @@ import com.examw.test.imports.service.PaperStructureRemoteDataService;
 import com.examw.test.imports.shiro.service.UserAuthentication;
 import com.examw.test.imports.support.HttpUtil;
 import com.examw.test.imports.support.MD5Util;
+import com.examw.test.imports.support.StructureSubjectCacheUtil;
 /**
  *  客户端服务实现。
  * 
@@ -176,6 +177,7 @@ public class DefaultClientServiceImpl implements UserAuthentication,ItemTypeRemo
 			}
 			title = builder.append(">").append(title).toString();
 		}
+		StructureSubjectCacheUtil.put(info.getId(), info.getSubjectId(), info.getSubjectName());
 		list.add(new KeyValueType(info.getId(), title, info.getType()));
 		if(info.getChildren() != null && info.getChildren().size() > 0){
 			for(ClientStructureInfo child : info.getChildren()){

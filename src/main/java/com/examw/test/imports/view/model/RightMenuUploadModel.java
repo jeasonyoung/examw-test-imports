@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.util.StringUtils;
 
@@ -22,6 +23,7 @@ import com.examw.test.imports.service.UploadPreview;
  */
 public class RightMenuUploadModel extends RightMenuBaseModel {
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(RightMenuUploadModel.class);
 	private String warningTitle,noSelectPaperMessager,noSelectPaperStructureMessager;
 	private PaperOPService paperOPService;
 	private PaperStructureOPService paperStructureOPService;
@@ -32,13 +34,15 @@ public class RightMenuUploadModel extends RightMenuBaseModel {
 	 */
 	public RightMenuUploadModel(JTextComponent textComponent) {
 		super(textComponent);
+		if(logger.isDebugEnabled()) logger.debug("构造函数...");
 	}
 	/**
 	 * 设置所属试卷。
 	 * @param paperOPService 
-	 *	  paperOPService
+	 *	  所属试卷。
 	 */
 	public void setPaperOPService(PaperOPService paperOPService) {
+		if(logger.isDebugEnabled()) logger.debug("设置所属试卷...");
 		this.paperOPService = paperOPService;
 	}
 	/**
@@ -47,6 +51,7 @@ public class RightMenuUploadModel extends RightMenuBaseModel {
 	 *	  所属试卷结构。
 	 */
 	public void setPaperStructureOPService(PaperStructureOPService paperStructureOPService) {
+		if(logger.isDebugEnabled()) logger.debug("设置所属试卷结构...");
 		this.paperStructureOPService = paperStructureOPService;
 	}
 	/**
@@ -55,14 +60,16 @@ public class RightMenuUploadModel extends RightMenuBaseModel {
 	 *	  预览接口。
 	 */
 	public void setPreview(UploadPreview preview) {
+		if(logger.isDebugEnabled()) logger.debug("设置预览接口...");
 		this.preview = preview;
 	}
 	/**
 	 * 设置警告信息标题。
 	 * @param warningTitle 
-	 *	  warningTitle
+	 *	  警告信息标题。
 	 */
 	public void setWarningTitle(String warningTitle) {
+		if(logger.isDebugEnabled()) logger.debug("设置警告信息标题:" + warningTitle);
 		this.warningTitle = warningTitle;
 	}
 	/**
@@ -71,6 +78,7 @@ public class RightMenuUploadModel extends RightMenuBaseModel {
 	 *	  未选择所属试卷消息。
 	 */
 	public void setNoSelectPaperMessager(String noSelectPaperMessager) {
+		if(logger.isDebugEnabled()) logger.debug("设置未选择所属试卷消息:" + noSelectPaperMessager);
 		this.noSelectPaperMessager = noSelectPaperMessager;
 	}
 	/**
@@ -111,5 +119,4 @@ public class RightMenuUploadModel extends RightMenuBaseModel {
 			 this.preview.showDialog(paperId, structureId, clientUploadItems);
 		}
 	}
-
 }

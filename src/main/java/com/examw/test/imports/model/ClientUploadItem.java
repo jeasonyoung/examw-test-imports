@@ -16,7 +16,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class ClientUploadItem implements Serializable,Comparable<ClientUploadItem> {
 	private static final long serialVersionUID = 1L;
-	private String  pid,id,content,answer,analysis;
+	private String  pid,id,content,answer,analysis,subjectId;
 	private Integer type,orderNo;
 	private Set<ClientUploadItem> children;
 	/**
@@ -111,6 +111,21 @@ public class ClientUploadItem implements Serializable,Comparable<ClientUploadIte
 	 */
 	public void setAnalysis(String analysis) {
 		this.analysis = analysis;
+	}
+	/**
+	 * 获取所属科目ID。
+	 * @return 所属科目ID。
+	 */
+	public String getSubjectId() {
+		return subjectId;
+	}
+	/**
+	 * 设置所属科目ID。
+	 * @param subjectId 
+	 *	  所属科目ID。
+	 */
+	public void setSubjectId(String subjectId) {
+		this.subjectId = subjectId;
 	}
 	/**
 	 * 获取题型。

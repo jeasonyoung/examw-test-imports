@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.examw.test.imports.model.KeyValueType;
 import com.examw.test.imports.service.ItemTypeOPService;
+import com.examw.test.imports.service.OPService;
 import com.examw.test.imports.service.PaperStructureOPService;
 import com.examw.test.imports.service.PaperStructureRemoteDataService;
 
@@ -21,6 +22,7 @@ public class PaperStructureComboBoxModel extends DefaultComboBoxModel<KeyValueTy
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(PaperStructureComboBoxModel.class);
 	private PaperStructureRemoteDataService paperStructureRemoteDataService;
+	private OPService paperStructureSubjectOPService;
 	private ItemTypeOPService itemTypeOPService;
 	/**
 	 * 设置试卷结构远程数据服务接口。
@@ -28,6 +30,7 @@ public class PaperStructureComboBoxModel extends DefaultComboBoxModel<KeyValueTy
 	 *	  试卷结构远程数据服务接口。
 	 */
 	public void setPaperStructureRemoteDataService(PaperStructureRemoteDataService paperStructureRemoteDataService) {
+		if(logger.isDebugEnabled()) logger.debug("设置试卷结构远程数据服务接口...");
 		this.paperStructureRemoteDataService = paperStructureRemoteDataService;
 	}
 	/**
@@ -36,7 +39,17 @@ public class PaperStructureComboBoxModel extends DefaultComboBoxModel<KeyValueTy
 	 *	  题型操作服务接口。
 	 */
 	public void setItemTypeOPService(ItemTypeOPService itemTypeOPService) {
+		if(logger.isDebugEnabled()) logger.debug("设置题型操作服务接口...");
 		this.itemTypeOPService = itemTypeOPService;
+	}
+	/**
+	 * 设置试卷结构下科目操作服务接口。
+	 * @param paperStructureSubjectOPService 
+	 *	  试卷结构下科目操作服务接口。
+	 */
+	public void setPaperStructureSubjectOPService(OPService paperStructureSubjectOPService) {
+		if(logger.isDebugEnabled()) logger.debug("试卷结构下科目操作服务接口...");
+		this.paperStructureSubjectOPService = paperStructureSubjectOPService;
 	}
 	/*
 	 * 加载远程数据。
@@ -79,6 +92,9 @@ public class PaperStructureComboBoxModel extends DefaultComboBoxModel<KeyValueTy
 		if(model != null && this.itemTypeOPService != null){
 			KeyValueType data = model.getSelected();
 			if(data != null){
+				if(this.paperStructureSubjectOPService != null){
+					this.paperStructureSubjectOPService.loadRemoteData(new String[]{ data.getKey()});
+				}
 				this.itemTypeOPService.setSelected(data.getType() == null ? "" : data.getType().toString());
 			}
 		}

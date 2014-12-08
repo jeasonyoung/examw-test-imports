@@ -13,6 +13,7 @@ public class ClientStructureInfo implements Serializable {
 	private String id,title;
 	private Integer type,orderNo;
 	private List<ClientStructureInfo> children;
+	private String[] subjectId,subjectName;
 	/**
 	 * 获取结构ID。
 	 * @return 结构ID。
@@ -57,6 +58,36 @@ public class ClientStructureInfo implements Serializable {
 	 */
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	/**
+	 * 获取科目ID集合。
+	 * @return 科目ID集合。
+	 */
+	public String[] getSubjectId() {
+		return subjectId;
+	}
+	/**
+	 * 设置科目ID集合。
+	 * @param subjectId 
+	 *	  科目ID集合。
+	 */
+	public void setSubjectId(String[] subjectId) {
+		this.subjectId = subjectId;
+	}
+	/**
+	 * 获取科目名称集合。
+	 * @return 科目名称集合。
+	 */
+	public String[] getSubjectName() {
+		return subjectName;
+	}
+	/**
+	 * 设置科目名称集合。
+	 * @param subjectName 
+	 *	  科目名称集合。
+	 */
+	public void setSubjectName(String[] subjectName) {
+		this.subjectName = subjectName;
 	}
 	/**
 	 * 获取排序号。
